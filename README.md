@@ -1,4 +1,4 @@
-![Header](https://capsule-render.vercel.app/api?type=waving&color=F8E2CF&height=240&section=header&text=Asparagus&fontSize=80&animation=fadeIn&fontAlignY=38&fontColor=3A4A51)
+![Header](https://capsule-render.vercel.app/api?type=waving&color=F8E2CF&height=240&section=header&text=Petstagram&fontSize=80&animation=fadeIn&fontAlignY=38&fontColor=3A4A51)
 
 
 <div align="center">
@@ -37,7 +37,7 @@ REACT_APP_API_URL=[API_URL]
 
 ## Petstagram 프로젝트의 구성원
 
-|[배상우 <br>(seovee)](https://github.com/seovee)|[박일범(5wintaek)](https://github.com/5wintaek)|[최예송(to06109)](https://github.com/to06109)|[박원준(kyuran6)](https://github.com/kyuran6)|
+|[배상우 <br>(bsw98)](https://github.com/bsw98)|[박일범(parkilbeom)](https://github.com/parkilbeom)|[최예송(to06109)](https://github.com/to06109)|[박원준(djswns7)](https://github.com/djswns7)|
 |------|---|---|---|
 
 <br>
