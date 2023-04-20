@@ -1,9 +1,9 @@
-import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "./counter";
+import { configureStore } from '@reduxjs/toolkit';
+import rootReducer from '@/modules';
 
 const store = configureStore({
-  reducer: counterReducer,
-  devTools: process.env.NODE_ENV !== "production",
+  reducer: rootReducer,
+  devTools: process.env.NODE_ENV !== 'production',
 });
 
 export default store;
