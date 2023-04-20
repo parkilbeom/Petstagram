@@ -1,5 +1,5 @@
-import { app } from '../firebase/app.js';
-import { Counter } from '../components/Counter';
+import { app } from "../firebase/app.js";
+import { Counter } from "../components/Counter.tsx";
 
 console.log(app);
 
