@@ -184,19 +184,30 @@ export default function Signup() {
           가입
         </button>
       </Form>
-      <Link href="/login">로그인하기</Link>
+      <Div>
+        <p>계정이 있으신가요?</p>
+        <Link href="/login">로그인</Link>
+      </Div>
     </Article>
   );
 }
 
-const Article = styled.article`
+const Div = styled.div`
+  display: flex;
+  flex-flow: row;
+  margin-top: 40px;
+`;
+export const Article = styled.article`
   display: flex;
   flex-flow: column;
   align-items: center;
   justify-content: center;
   width: 100%;
 `;
-const Form = styled.form`
+export const Form = styled.form`
+  & * {
+    margin-top: 10px;
+  }
   border: 1px solid black;
   width: 100%;
   max-width: 398px;
