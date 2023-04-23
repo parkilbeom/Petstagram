@@ -50,9 +50,9 @@ export default function Signup() {
       confirmPasswordRef.current &&
       passwordRef.current.value == confirmPasswordRef.current.value
     ) {
-      setonPassword(true);
-    } else {
       setonPassword(false);
+    } else {
+      setonPassword(true);
     }
   };
   // 회원가입 버튼
@@ -66,6 +66,7 @@ export default function Signup() {
     return passwordRegex.test(password);
   };
   const signup = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log(onPassword);
     e.preventDefault();
     if (formState.email == "") {
       return alert("이메일을 입력해주세요.");
@@ -82,7 +83,7 @@ export default function Signup() {
     if (!isValidPassword(formState.password)) {
       return alert("비밀번호는 6자 이상이어야 합니다.");
     }
-    if (!onPassword) {
+    if (onPassword) {
       return alert("비밀번호를 확인해주세요.");
     }
     setonButton(false);
