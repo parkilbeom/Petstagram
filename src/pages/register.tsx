@@ -66,7 +66,6 @@ export default function Signup() {
     return passwordRegex.test(password);
   };
   const signup = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log(onPassword);
     e.preventDefault();
     if (formState.email == "") {
       return alert("이메일을 입력해주세요.");

@@ -14,7 +14,7 @@ export default function Login() {
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        console.log("로그인 상태" + user);
+        console.log(`로그인 상태+${user}`);
         // 사용자가 로그인한 경우 처리할 작업
       } else {
         console.log("로그아웃 상태");
@@ -26,7 +26,7 @@ export default function Login() {
   }, []);
   const [showPopup, setShowPopup] = useState(false);
   //  로그인 버튼
-  const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSignIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     try {
@@ -41,7 +41,17 @@ export default function Login() {
       // 로그인 실패 시 처리할 작업
     }
   };
+  // 로그아웃 버튼 (임시)
 
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+      console.log("Successfully logged out");
+      // 로그아웃 후 처리할 작업이 있다면 여기에 추가할 수 있습니다.
+    } catch (error) {
+      console.error("Error occurred while logging out", error);
+    }
+  };
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState((prevState) => ({
       ...prevState,
@@ -73,13 +83,16 @@ export default function Login() {
           required
         />
 
-        <button type="submit">로그인</button>
+        <button type="submit" onClick={handleSignIn}>
+          로그인
+        </button>
       </Form>
       {showPopup && <p>로그인 확인부탁</p>}
       <Div>
         <p>계정이 없으신가요?</p>
         <Link href="/register">가입하기</Link>
       </Div>
+      <button onClick={handleLogout}>로그아웃</button>
     </Article>
   );
 }
