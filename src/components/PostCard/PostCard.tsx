@@ -1,54 +1,26 @@
 import React from 'react';
-import styled from 'styled-components';
+import { ImageSwiper } from './ImageSwiper';
 
-// Import Swiper React components
-import { Swiper, SwiperSlide } from 'swiper/react';
-// import required modules
-import { Navigation, Pagination, A11y, Scrollbar } from 'swiper';
+const testImageObject = [
+  {
+    src: 'https://dimg.donga.com/wps/NEWS/IMAGE/2022/01/28/111500268.2.jpg',
+    alt: '멍뭉이1',
+  },
+  {
+    src: 'https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/32E9/image/BA2Qyx3O2oTyEOsXe2ZtE8cRqGk.JPG',
+    alt: '멍뭉이2',
+  },
+  {
+    src: 'https://interbalance.org/wp-content/uploads/2021/08/flouffy-VBkIK3qj3QE-unsplash-scaled-e1631077364762.jpg',
+    alt: '멍뭉이3',
+  },
+];
 
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-
-type IImage = {
-  src: string;
-  alt: string;
-};
-
-type IPostCardProps = {
-  images: (IImage | undefined)[];
-};
-
-export function PostCard({ images }: IPostCardProps) {
+export function PostCard() {
   return (
-    <StyledSwiper
-      modules={[Navigation, Pagination, A11y, Scrollbar]}
-      slidesPerView={1}
-      pagination={{
-        clickable: true,
-        bulletElement: 'button',
-      }}
-      navigation={true}
-    >
-      {images.map((image, index) => {
-        return (
-          <SwiperSlide key={index}>
-            <StyledSwiperSlideImg src={image?.src} alt={image?.alt} />
-          </SwiperSlide>
-        );
-      })}
-    </StyledSwiper>
+    <>
+      <div>포스트카드 컴포넌트</div>
+      <ImageSwiper images={testImageObject} />
+    </>
   );
 }
-
-const StyledSwiper = styled(Swiper)`
-  width: 100%;
-  height: 100%;
-`;
-
-const StyledSwiperSlideImg = styled.img`
-  display: block;
-  width: 100%;
-  height: 100%;
-`;
