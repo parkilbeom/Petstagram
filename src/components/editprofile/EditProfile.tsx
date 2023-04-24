@@ -1,11 +1,18 @@
 import styled from "styled-components";
 import { EditDiv } from "./EditPaswword";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+interface state {
+  userUid: { value: string };
+}
 export default function EditProfile() {
   const [introduce, setIntroduce] = useState("");
   const [count, setCount] = useState(0);
-
+  const userUid = useSelector((state: state) => state.userUid.value);
+  useEffect(() => {
+    console.log(userUid);
+  }, []);
+  // 카운트 함수
   const onChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setIntroduce(e.target.value);
     setCount(e.target.value.length);
