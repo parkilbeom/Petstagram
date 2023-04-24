@@ -1,7 +1,7 @@
 import { getStorage, uploadBytes, ref } from "firebase/storage";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "./app";
-
+import firebase from "@/firebase/app";
 // 파이어스토어로 데이터 보내는 함수 (콜렉션 이름,넣을 객체)
 export function pushData(collection: string, object: object) {
   db.collection(collection)
@@ -28,4 +28,15 @@ export const pushFile = (file: File, src: string, imageName: string) => {
   const storage = getStorage();
   const mountainRef = ref(storage, `${src}/${imageName}`);
   uploadBytes(mountainRef, file);
+};
+
+// 파이어베이스 로그인 유저 uid 받아오기
+export const getUserUid = async () => {
+  await firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      return user.uid;
+    } else {
+      console.log("로그아웃상태");
+    }
+  });
 };

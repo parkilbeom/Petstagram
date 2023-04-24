@@ -23,14 +23,12 @@ export default function LoginCheck() {
         //     `로그인상태\nUID : ${user.uid} \n닉네임 : ${doc.data()?.name}`
         //   );
         // });
+        dispatch(login());
       } else {
         console.log("로그아웃상태");
       }
     });
   }, []);
-  useEffect(() => {
-    dispatch(login());
-  }, [loginCheck]);
 
   const userUid = useSelector((state: state) => state.userUid.value);
   return <p>로그인 상태 : {userUid}</p>;
