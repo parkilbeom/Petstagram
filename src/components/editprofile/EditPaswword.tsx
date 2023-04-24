@@ -7,5 +7,5 @@ export default function EditPaswword() {
 export const EditDiv = styled.div`
   border: 1px solid black;
   width: 1010px;
-  height: 1106px;
+  height: 800px;
 `;
