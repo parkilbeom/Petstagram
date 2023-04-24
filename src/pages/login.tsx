@@ -1,19 +1,15 @@
 import styled from "styled-components";
 import { Article, Form } from "./register";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
-import firebase, { auth, usersRef } from "@/firebase/app";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { login } from "@/redux/userUid";
+import firebase, { auth } from "@/firebase/app";
 
 interface state {
   userUid: { value: string };
 }
 
 export default function Login() {
-  const dispatch = useDispatch();
   const router = useRouter();
   const [formState, setFormState] = useState({
     email: "",
@@ -21,9 +17,21 @@ export default function Login() {
   });
   const [showPopup, setShowPopup] = useState(false);
   //  로그인 버튼
+
+  function validateEmail(email: string) {
+    // 이메일 주소의 유효성을 검사하는 정규식
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return regex.test(email);
+  }
+
   const handleSignIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-
+    if (formState.email == "") {
+      return alert("이메일을 입력해주세요.");
+    }
+    if (!validateEmail(formState.email)) {
+      return alert("올바른 이메일 주소가 아닙니다.");
+    }
     try {
       await firebase
         .auth()
@@ -56,38 +64,43 @@ export default function Login() {
   };
   return (
     <Article>
-      <Form>
-        <label htmlFor="email">이메일</label>
-        <input
-          type="email"
-          name="email"
-          value={formState.email}
-          onChange={handleInputChange}
-          id="email"
-          placeholder="이메일"
-          required
-        />
+      <MainDiv>
+        <form>
+          <label htmlFor="email">이메일</label>
+          <input
+            type="email"
+            name="email"
+            value={formState.email}
+            onChange={handleInputChange}
+            id="email"
+            placeholder="이메일"
+            required
+          />
 
-        <label htmlFor="password">비밀번호</label>
-        <input
-          type="password"
-          name="password"
-          value={formState.password}
-          onChange={handleInputChange}
-          id="password"
-          placeholder="비밀번호"
-          required
-        />
+          <label htmlFor="password">비밀번호</label>
+          <input
+            type="password"
+            name="password"
+            value={formState.password}
+            onChange={handleInputChange}
+            id="password"
+            placeholder="비밀번호"
+            required
+          />
 
-        <button type="submit" onClick={handleSignIn}>
-          로그인
-        </button>
-      </Form>
+          <button type="submit" onClick={handleSignIn}>
+            로그인
+          </button>
+        </form>
+        <Link className="searchPassword" href="/passwordreset">
+          비밀번호를 잊으셨나요?
+        </Link>
+      </MainDiv>
       {showPopup && <p>로그인 확인부탁</p>}
-      <Div>
+      <SideDiv>
         <p>계정이 없으신가요?</p>
         <Link href="/register">가입하기</Link>
-      </Div>
+      </SideDiv>
       <form action="">
         <button type="submit" onClick={handleLogout}>
           로그아웃
@@ -96,8 +109,27 @@ export default function Login() {
     </Article>
   );
 }
-
-const Div = styled.div`
+const MainDiv = styled.div`
+  * {
+    margin-top: 10px;
+  }
+  .searchPassword {
+    margin: 0 auto;
+    margin-top: 150px;
+  }
+  form {
+    display: flex;
+    flex-flow: column;
+  }
+  border: 1px solid black;
+  width: 100%;
+  max-width: 398px;
+  min-width: 320px;
+  display: flex;
+  flex-flow: column;
+  height: 572px;
+`;
+const SideDiv = styled.div`
   margin-top: 15px;
   justify-content: center;
   align-items: center;
