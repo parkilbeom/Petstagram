@@ -6,16 +6,19 @@ import { useState } from "react";
 export default function Edit() {
   const [click, setClick] = useState<boolean>(false);
 
-  function clickHandler() {
-    click ? setClick(false) : setClick(true);
+  function profileClickHandler() {
+    setClick(false);
+  }
+  function PasswordClcikHandler() {
+    setClick(true);
   }
 
   return (
     <Section>
-      <EditButton onClick={clickHandler} isClick={click ? true : false}>
+      <EditButton onClick={profileClickHandler} isClick={click ? true : false}>
         프로필 편집
       </EditButton>
-      <EditButton onClick={clickHandler} isClick={click ? false : true}>
+      <EditButton onClick={PasswordClcikHandler} isClick={click ? false : true}>
         비밀번호 변경
       </EditButton>
       {!click ? <EditProfile /> : <EditPaswword />}

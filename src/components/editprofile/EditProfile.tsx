@@ -2,15 +2,25 @@ import styled from "styled-components";
 import { EditDiv } from "./EditPaswword";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { getData, getUserUid } from "@/firebase/utils";
+import { db } from "@/firebase/app";
 interface state {
   userUid: { value: string };
 }
+
 export default function EditProfile() {
   const [introduce, setIntroduce] = useState("");
   const [count, setCount] = useState(0);
+  const [uid, setUid] = useState<string>("");
   const userUid = useSelector((state: state) => state.userUid.value);
   useEffect(() => {
-    console.log(userUid);
+    getUserUid().then((useruid) => {
+      if (useruid) {
+        getData("users", userUid).then((item) => {
+          console.log(item);
+        });
+      }
+    });
   }, []);
   // 카운트 함수
   const onChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

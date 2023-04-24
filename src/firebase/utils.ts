@@ -11,15 +11,29 @@ export function pushData(collection: string, object: object) {
 }
 // 파이어스토에서 데이터 받아오는 함수  (콜렉션 이름),(도큐먼트이름) 도큐먼트 없어도 사용가능
 export const getData = async (collectionName: string, docName?: string) => {
-  if (docName) {
-    const userInfoRef = db.collection(collectionName).doc(docName);
-    return userInfoRef.get().then((doc) => {
-      return doc.data();
-    });
-  }
-  const querySnapshot = await getDocs(collection(db, collectionName));
-  const data = querySnapshot.docs.map((doc) => doc.data());
-  return data;
+  return new Promise((resolve, reject) => {
+    if (docName) {
+      const userInfoRef = db.collection(collectionName).doc(docName);
+      userInfoRef
+        .get()
+        .then((doc) => {
+          resolve(doc.data());
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    } else {
+      const querySnapshot = getDocs(collection(db, collectionName));
+      querySnapshot
+        .then((snapshot) => {
+          const data = snapshot.docs;
+          resolve(data);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    }
+  });
 };
 
 // 파이어베이스 데이터베이스에 데이터 보내는 함수 (보낼 파일, 경로, 저장 할 파일의 이름)
@@ -35,7 +49,6 @@ export const getUserUid = () => {
   return new Promise((resolve, reject) => {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        console.log(user.uid);
         resolve(user.uid);
       } else {
         console.log("로그아웃상태");
