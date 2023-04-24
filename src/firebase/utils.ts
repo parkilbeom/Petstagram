@@ -31,12 +31,16 @@ export const pushFile = (file: File, src: string, imageName: string) => {
 };
 
 // 파이어베이스 로그인 유저 uid 받아오기
-export const getUserUid = async () => {
-  await firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      return user.uid;
-    } else {
-      console.log("로그아웃상태");
-    }
+export const getUserUid = () => {
+  return new Promise((resolve, reject) => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        console.log(user.uid);
+        resolve(user.uid);
+      } else {
+        console.log("로그아웃상태");
+        reject(new Error("로그아웃상태입니다."));
+      }
+    });
   });
 };
