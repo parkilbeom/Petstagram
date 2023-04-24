@@ -4,12 +4,14 @@ import store from "../redux/store";
 import { createGlobalStyle } from "styled-components";
 import normalize from "styled-normalize";
 import reset from "styled-reset";
+import LoginCheck from "@/components/loginCheck";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <GlobalStyles />
       <Provider store={store}>
+        <LoginCheck />
+        <GlobalStyles />
         <Component {...pageProps} />
       </Provider>
     </>

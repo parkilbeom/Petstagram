@@ -1,9 +1,12 @@
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "@/modules";
 import { increment, decrement } from "../redux/counter";
 
+interface state {
+  counter: { value: number };
+}
+
 export function Counter() {
-  const count = useSelector((state: RootState) => state.counterReduce.value);
+  const count = useSelector((state: state) => state.counter.value);
   const dispatch = useDispatch();
 
   return (

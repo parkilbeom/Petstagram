@@ -4,22 +4,21 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import firebase, { auth, usersRef } from "@/firebase/app";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { login } from "@/redux/userUid";
+
+interface state {
+  userUid: { value: string };
+}
 
 export default function Login() {
+  const dispatch = useDispatch();
   const router = useRouter();
   const [formState, setFormState] = useState({
     email: "",
     password: "",
   });
-  useEffect(() => {
-    const currentUser = firebase.auth().currentUser;
-    if (currentUser) {
-      const uid = currentUser.uid;
-      console.log(uid); // 현재 로그인한 사용자의 UID를 출력합니다.
-    } else {
-      console.log("로그인되어 있지 않습니다.");
-    }
-  }, []);
   const [showPopup, setShowPopup] = useState(false);
   //  로그인 버튼
   const handleSignIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -31,7 +30,6 @@ export default function Login() {
         .signInWithEmailAndPassword(formState.email, formState.password)
         .then(() => {
           console.log("로그인 성공");
-          router.push("/login");
         });
     } catch (error) {
       alert("로그인 실패");
@@ -44,6 +42,7 @@ export default function Login() {
     try {
       await auth.signOut();
       console.log("Successfully logged out");
+
       // 로그아웃 후 처리할 작업이 있다면 여기에 추가할 수 있습니다.
     } catch (error) {
       console.error("Error occurred while logging out", error);
@@ -89,7 +88,11 @@ export default function Login() {
         <p>계정이 없으신가요?</p>
         <Link href="/register">가입하기</Link>
       </Div>
-      <button onClick={handleLogout}>로그아웃</button>
+      <form action="">
+        <button type="submit" onClick={handleLogout}>
+          로그아웃
+        </button>
+      </form>
     </Article>
   );
 }
