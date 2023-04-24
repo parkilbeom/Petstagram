@@ -1,5 +1,5 @@
 import { getStorage, uploadBytes, ref } from "firebase/storage";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "./app";
 import firebase from "@/firebase/app";
 // 파이어스토어로 데이터 보내는 함수 (콜렉션 이름,넣을 객체)
@@ -51,9 +51,19 @@ export const getUserUid = () => {
       if (user) {
         resolve(user.uid);
       } else {
+        resolve(1);
         console.log("로그아웃상태");
-        reject(new Error("로그아웃상태입니다."));
       }
     });
   });
+};
+//  파이어베이스 업데이트 독 함수 (원래 있는 문서에 일부 객체만 업데이트 하기)
+//  콜렉션 < 도큐먼트에 있는 오브젝트 {} 업데이트 할게~
+export const updateData = (
+  collection: string,
+  documentname: string,
+  object: object
+) => {
+  const userRef = doc(db, collection, documentname);
+  updateDoc(userRef, object);
 };

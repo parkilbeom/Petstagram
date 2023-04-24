@@ -7,7 +7,6 @@ import { db } from "@/firebase/app";
 interface state {
   userUid: { value: string };
 }
-
 export default function EditProfile() {
   const [introduce, setIntroduce] = useState("");
   const [count, setCount] = useState(0);

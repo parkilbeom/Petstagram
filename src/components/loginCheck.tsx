@@ -12,13 +12,9 @@ interface state {
 export default function LoginCheck() {
   const dispatch = useDispatch();
   const [loginCheck, setLoginCheck] = useState("비로그인 상태");
-
-  useEffect(() => {
-    getUserUid().then(() => {
-      dispatch(login());
-    });
-  }, []);
-
   const userUid = useSelector((state: state) => state.userUid.value);
+  useEffect(() => {
+    dispatch(login());
+  }, []);
   return <p>로그인 상태 : {userUid}</p>;
 }
