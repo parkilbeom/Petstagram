@@ -12,17 +12,13 @@ export default function Login() {
     password: "",
   });
   useEffect(() => {
-    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        console.log(`로그인 상태+${user}`);
-        // 사용자가 로그인한 경우 처리할 작업
-      } else {
-        console.log("로그아웃 상태");
-        // 사용자가 로그아웃한 경우 처리할 작업
-      }
-    });
-
-    return unsubscribe;
+    const currentUser = firebase.auth().currentUser;
+    if (currentUser) {
+      const uid = currentUser.uid;
+      console.log(uid); // 현재 로그인한 사용자의 UID를 출력합니다.
+    } else {
+      console.log("로그인되어 있지 않습니다.");
+    }
   }, []);
   const [showPopup, setShowPopup] = useState(false);
   //  로그인 버튼
@@ -35,6 +31,7 @@ export default function Login() {
         .signInWithEmailAndPassword(formState.email, formState.password)
         .then(() => {
           console.log("로그인 성공");
+          router.push("/login");
         });
     } catch (error) {
       alert("로그인 실패");
