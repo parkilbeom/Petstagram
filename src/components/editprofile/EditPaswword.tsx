@@ -69,7 +69,7 @@ export default function EditPassword() {
     <EditDiv>
       <Form onSubmit={handleSubmit}>
         <label>
-          현재 비밀번호
+          <span>현재 비밀번호</span>
           <input
             type="password"
             name="currentPassword"
@@ -78,7 +78,7 @@ export default function EditPassword() {
           />
         </label>
         <label>
-          새로운 비밀번호
+          <span>새로운 비밀번호</span>
           <input
             type="password"
             name="newPassword"
@@ -87,7 +87,7 @@ export default function EditPassword() {
           />
         </label>
         <label>
-          새로운 비밀번호 확인
+          <span>새로운 비밀번호 확인</span>
           <input
             type="password"
             name="newPasswordConfirm"
@@ -106,6 +106,35 @@ const Form = styled.form`
   align-items: center;
   display: flex;
   flex-flow: column;
+  margin: 0 144px 0 134px;
+  label {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 20px;
+    display: flex;
+  }
+  label input {
+    width: 507px;
+    height: 41px;
+  }
+  label span {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+  }
+  button {
+    position: relative;
+    top: 50px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    color: white;
+    background: #2fb4ff;
+    width: 159px;
+    height: 35px;
+  }
 `;
 export const EditDiv = styled.div`
   border: 1px solid black;
