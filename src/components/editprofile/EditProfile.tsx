@@ -93,20 +93,25 @@ export default function EditProfile() {
     //  파일 전송
     if (fileRef.current?.files) {
       const file = fileRef.current.files[0];
-      pushFile(file, "profileimages", file.name);
       const imageRef = ref(storage, `profileimages/${file.name}`);
-      // 이미지 전송 후 url 받은 후 데이터 업데이트하게 진행
-      getDownloadURL(imageRef).then((item) => {
-        formState.profile_url = item;
-        const newObject: { [key: string]: string | null | undefined } = {};
-        Object.entries(formState).forEach(([key, value]) => {
-          if (formState.hasOwnProperty(key) && value !== "" && value !== null) {
-            newObject[key] = value;
-          }
+      uploadBytes(imageRef, file).then(() => {
+        // 이미지 전송 후 url 받은 후 데이터 업데이트하게 진행
+        getDownloadURL(imageRef).then((item) => {
+          formState.profile_url = item;
+          const newObject: { [key: string]: string | null | undefined } = {};
+          Object.entries(formState).forEach(([key, value]) => {
+            if (
+              formState.hasOwnProperty(key) &&
+              value !== "" &&
+              value !== null
+            ) {
+              newObject[key] = value;
+            }
+          });
+          updateData("users", userUid, newObject);
+          // 라우터 부분은 나중에 컴포넌트 완성되면 에딧 모달창 꺼지게끔 변경 예정
+          router.push("/");
         });
-        updateData("users", userUid, newObject);
-        // 라우터 부분은 나중에 컴포넌트 완성되면 에딧 모달창 꺼지게끔 변경 예정
-        router.push("/");
       });
     }
 
@@ -250,6 +255,7 @@ const Form = styled.form`
     line-height: 24px;
   }
   .submitButton {
+    cursor: pointer;
     position: absolute;
     bottom: 50px;
     right: 0;
