@@ -8,6 +8,7 @@ interface FormState {
   email: string;
   password: string;
   displayName: string;
+  nickName: string;
 }
 
 export default function Signup() {
@@ -15,6 +16,7 @@ export default function Signup() {
     email: "",
     password: "",
     displayName: "",
+    nickName: "",
   });
   const [onButton, setonButton] = useState<boolean>(true);
   const [onPassword, setonPassword] = useState<boolean>(true);
@@ -77,6 +79,9 @@ export default function Signup() {
       return alert("중복확인은 필수입니다.");
     }
     if (!formState.displayName) {
+      return alert("성명을 입력해주세요.");
+    }
+    if (!formState.nickName) {
       return alert("사용자 이름을 입력해주세요.");
     }
     if (!isValidPassword(formState.password)) {
@@ -95,6 +100,7 @@ export default function Signup() {
 
           usersRef.doc(user.uid).set({
             name: formState.displayName,
+            nickname: formState.nickName,
             email: user.email,
             post_uid: [],
             introduce: "",
@@ -143,11 +149,21 @@ export default function Signup() {
           </button>
         </label>
         <label htmlFor="displayName">
-          사용자 이름:
+          성명:
           <input
             type="text"
             id="displayName"
             value={formState.displayName}
+            onChange={handleInputChange}
+            required
+          />
+        </label>
+        <label htmlFor="nickName">
+          사용자 이름:
+          <input
+            type="text"
+            id="nickName"
+            value={formState.nickName}
             onChange={handleInputChange}
             required
           />
