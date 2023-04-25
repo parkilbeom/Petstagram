@@ -90,6 +90,15 @@ export default function EditProfile() {
   // 업데이트 버튼
   const updateButtonHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    if (
+      formState.introduce == "" &&
+      formState.name == "" &&
+      formState.nickname == "" &&
+      formState.phone == null &&
+      formState.profile_url == ""
+    ) {
+      return alert("변경이 없습니다.");
+    }
     //  파일 전송
     if (fileRef.current?.files) {
       const file = fileRef.current.files[0];
