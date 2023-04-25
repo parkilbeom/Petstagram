@@ -23,10 +23,12 @@ export function PostCard() {
     <>
       <Article>
         <HeaderSection>
-          <img
-            src='https://dimg.donga.com/wps/NEWS/IMAGE/2022/01/28/111500268.2.jpg'
-            alt='프로필 사진'
-          />
+          <ProfileButton>
+            <img
+              src='https://dimg.donga.com/wps/NEWS/IMAGE/2022/01/28/111500268.2.jpg'
+              alt='프로필 사진'
+            />
+          </ProfileButton>
           <p>사용자 아이디</p>
           <p>1일</p>
           <MoreButton>...</MoreButton>
@@ -91,9 +93,17 @@ const HeaderSection = styled.section`
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
+`;
+
+const ProfileButton = styled.button`
+  all: unset;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+
   img {
-    width: 40px;
-    height: 40px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     border-radius: 50%;
   }
