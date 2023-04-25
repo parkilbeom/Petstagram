@@ -6,6 +6,8 @@ export default function Main() {
     <MainContainer>
       <MenuSection>메뉴바</MenuSection>
       <PostSection>
+        {/* a11y로 숨기기 */}
+        <h2>게시물</h2>
         <PostCard />
         <PostCard />
       </PostSection>
