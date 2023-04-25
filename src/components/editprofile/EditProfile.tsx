@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { getData, getUserUid, pushFile, updateData } from "@/firebase/utils";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "@/firebase/app";
 interface state {
   userUid: { value: string };
@@ -90,19 +90,27 @@ export default function EditProfile() {
   // 업데이트 버튼
   const updateButtonHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    //  파일 전송
     if (fileRef.current?.files) {
       const file = fileRef.current.files[0];
       pushFile(file, "profileimages", file.name);
+      const imageRef = ref(storage, `profileimages/${file.name}`);
+      // 이미지 전송 후 url 받은 후 데이터 업데이트하게 진행
+      getDownloadURL(imageRef).then((item) => {
+        formState.profile_url = item;
+        const newObject: { [key: string]: string | null | undefined } = {};
+        Object.entries(formState).forEach(([key, value]) => {
+          if (formState.hasOwnProperty(key) && value !== "" && value !== null) {
+            newObject[key] = value;
+          }
+        });
+        updateData("users", userUid, newObject);
+        // 라우터 부분은 나중에 컴포넌트 완성되면 에딧 모달창 꺼지게끔 변경 예정
+        router.push("/");
+      });
     }
-    const newObject: { [key: string]: string | null | undefined } = {};
-    Object.entries(formState).forEach(([key, value]) => {
-      if (formState.hasOwnProperty(key) && value !== "" && value !== null) {
-        newObject[key] = value;
-      }
-    });
-    updateData("users", userUid, newObject);
-    // 라우터 부분은 나중에 컴포넌트 완성되면 에딧 모달창 꺼지게끔 변경 예정
-    router.push("/");
+
+    // // 빈 값들은 업데이트 x
   };
   const handleInputChange = (e: { target: { id: string; value: string } }) => {
     setFormState((prevState) => ({
