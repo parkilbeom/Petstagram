@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import { EditDiv } from "./EditPaswword";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { getData, getUserUid, updateData } from "@/firebase/utils";
+import { getData, getUserUid, pushFile, updateData } from "@/firebase/utils";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { ref, uploadBytes } from "firebase/storage";
+import { storage } from "@/firebase/app";
 interface state {
   userUid: { value: string };
 }
@@ -28,6 +30,7 @@ interface FormState {
   profile_url: string;
 }
 export default function EditProfile() {
+  const fileRef = useRef<HTMLInputElement>(null);
   const [introduce, setIntroduce] = useState<string>("");
   const [count, setCount] = useState<number>(0);
   const [uid, setUid] = useState<string>("");
@@ -87,6 +90,10 @@ export default function EditProfile() {
   // 업데이트 버튼
   const updateButtonHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    if (fileRef.current?.files) {
+      const file = fileRef.current.files[0];
+      pushFile(file, "profileimages", file.name);
+    }
     const newObject: { [key: string]: string | null | undefined } = {};
     Object.entries(formState).forEach(([key, value]) => {
       if (formState.hasOwnProperty(key) && value !== "" && value !== null) {
@@ -123,7 +130,7 @@ export default function EditProfile() {
             )}
             <Div>
               <p>{userData.name}</p>
-              <input type="file" onChange={handleImageUpload} />
+              <input type="file" ref={fileRef} onChange={handleImageUpload} />
             </Div>
           </label>
           <label>
