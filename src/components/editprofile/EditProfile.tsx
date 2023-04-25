@@ -6,7 +6,7 @@ import { getData, getUserUid, pushFile, updateData } from "@/firebase/utils";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { storage } from "@/firebase/app";
+import { auth, storage } from "@/firebase/app";
 interface state {
   userUid: { value: string };
 }
@@ -75,6 +75,10 @@ export default function EditProfile() {
   // 리덕스 통해 uid 받아서 유저 데이터 받아오기
   const userUid = useSelector((state: state) => state.userUid.value);
   useEffect(() => {
+    const user = auth.currentUser;
+    if (!user) {
+      router.push("/");
+    }
     if (lender == false) {
       getData("users", userUid).then((item: any) => {
         setUserData(item);
