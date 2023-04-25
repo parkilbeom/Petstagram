@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getData, getUserUid, updateData } from "@/firebase/utils";
 import { useRouter } from "next/router";
+import Image from "next/image";
 interface state {
   userUid: { value: string };
 }
@@ -13,7 +14,7 @@ interface User {
   email: string;
   post_uid: string[] | null;
   introduce: string | null;
-  profile_url: string | null;
+  profile_url: string | undefined;
   phone: string | null;
   followers: string[] | null;
   following: string[] | null;
@@ -32,6 +33,23 @@ export default function EditProfile() {
   const [uid, setUid] = useState<string>("");
   const [lender, setLender] = useState<boolean>(false);
   const router = useRouter();
+  const [previewImage, setPreviewImage] = useState<string | undefined>();
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        setPreviewImage(reader.result as string);
+      };
+
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewImage(undefined);
+    }
+  };
   const [userData, setUserData] = useState<User>({
     name: "",
     nickname: "",
@@ -51,9 +69,10 @@ export default function EditProfile() {
     phone: null,
     profile_url: "",
   });
+  // 리덕스 통해 uid 받아서 유저 데이터 받아오기
   const userUid = useSelector((state: state) => state.userUid.value);
   useEffect(() => {
-    if (userData.name == "") {
+    if (lender == false) {
       getData("users", userUid).then((item: any) => {
         setUserData(item);
         setLender(true);
@@ -68,7 +87,15 @@ export default function EditProfile() {
   // 업데이트 버튼
   const updateButtonHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    updateData("users", userUid, formState);
+    const newObject: { [key: string]: string | null | undefined } = {};
+    Object.entries(formState).forEach(([key, value]) => {
+      if (formState.hasOwnProperty(key) && value !== "" && value !== null) {
+        newObject[key] = value;
+      }
+    });
+    updateData("users", userUid, newObject);
+    // 라우터 부분은 나중에 컴포넌트 완성되면 에딧 모달창 꺼지게끔 변경 예정
+    router.push("/");
   };
   const handleInputChange = (e: { target: { id: string; value: string } }) => {
     setFormState((prevState) => ({
@@ -82,10 +109,21 @@ export default function EditProfile() {
       {lender && (
         <Form>
           <label>
-            <img src="" alt="프로필 사진" />
+            {!previewImage ? (
+              <img
+                src={
+                  userData.profile_url == ""
+                    ? "https://firebasestorage.googleapis.com/v0/b/petstagram-fe291.appspot.com/o/profile.jpg?alt=media&token=33e36a93-00ef-44ae-aae1-1273ff89dbeb"
+                    : userData.profile_url
+                }
+                alt="프로필 사진"
+              />
+            ) : (
+              <img src={previewImage} alt="Preview Image" />
+            )}
             <Div>
               <p>{userData.name}</p>
-              <input type="file"></input>
+              <input type="file" onChange={handleImageUpload} />
             </Div>
           </label>
           <label>
@@ -181,7 +219,13 @@ const Form = styled.form`
   label input {
     width: 527px;
   }
-
+  label img {
+    width: 50px;
+    height: 50px;
+    margin-left: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
   label span {
     text-align: right;
     display: block;
