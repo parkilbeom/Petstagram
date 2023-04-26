@@ -38,6 +38,8 @@ export default function Login() {
         .signInWithEmailAndPassword(formState.email, formState.password)
         .then(() => {
           console.log("로그인 성공");
+          location.reload();
+          router.push("/");
         });
     } catch (error) {
       alert("로그인 실패");
