@@ -19,14 +19,14 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Provider store={store}>
+        <GlobalStyles />
+        <Navigate />
         {lender ? (
           <>
-            <Navigate />
             <LoginCheck />
-            <GlobalStyles />
-            <Component {...pageProps} />
           </>
         ) : null}
+        <Component {...pageProps} />
       </Provider>
     </>
   );
