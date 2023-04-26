@@ -3,6 +3,12 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import {
+  RegisterButton,
+  RegisterInput,
+} from "@/components/register/RegisterStyles";
+import logo from "../public/images/logo.svg";
+import Image from "next/image";
 
 interface FormState {
   email: string;
@@ -127,78 +133,85 @@ export default function Signup() {
   return (
     <Article>
       <Form>
-        <p>반려동물을 위한 커뮤니티에 가입하세요.</p>
-        <label htmlFor="email">
-          이메일:
-          <input
-            type="email"
-            id="email"
-            value={formState.email}
-            onChange={(e) => {
-              handleInputChange(e);
-              unCheckDUplicate;
-            }}
-            required
-          />
-          <button
-            onClick={(e) => {
-              checkDuplicate(e);
-            }}
-          >
-            중복확인
-          </button>
+        <Image src={logo} alt="로고" width={178.75} height={38.48} />
+        <label htmlFor="email" className="a11y-hidden">
+          이메일
         </label>
-        <label htmlFor="displayName">
-          성명:
-          <input
-            type="text"
-            id="displayName"
-            value={formState.displayName}
-            onChange={handleInputChange}
-            required
-          />
+        <RegisterInput
+          type="email"
+          id="email"
+          value={formState.email}
+          onChange={(e) => {
+            handleInputChange(e);
+            unCheckDUplicate;
+          }}
+          required
+          placeholder="이메일"
+        />
+        <DuplicateButton
+          onClick={(e) => {
+            checkDuplicate(e);
+          }}
+          // className="duplicateButton"
+        >
+          이메일 중복확인
+        </DuplicateButton>
+        <label htmlFor="displayName" className="a11y-hidden">
+          성명
         </label>
-        <label htmlFor="nickName">
-          사용자 이름:
-          <input
-            type="text"
-            id="nickName"
-            value={formState.nickName}
-            onChange={handleInputChange}
-            required
-          />
+        <RegisterInput
+          type="text"
+          id="displayName"
+          value={formState.displayName}
+          onChange={handleInputChange}
+          required
+          placeholder="성명"
+        />
+        <label htmlFor="nickName" className="a11y-hidden">
+          사용자 이름
         </label>
-        <label htmlFor="password">
+        <RegisterInput
+          type="text"
+          id="nickName"
+          value={formState.nickName}
+          onChange={handleInputChange}
+          required
+          placeholder="사용자 이름"
+        />
+        <label htmlFor="password" className="a11y-hidden">
           비밀번호:
-          <input
-            type="password"
-            id="password"
-            ref={passwordRef}
-            value={formState.password}
-            onChange={(e) => {
-              handleInputChange(e);
-              confirmInputChange();
-            }}
-            required
-          />
         </label>
-        <label htmlFor="confirmPassword">
-          비밀번호 확인:
-          <input
-            type="password"
-            ref={confirmPasswordRef}
-            onChange={confirmInputChange}
-            required
-          />
+        <RegisterInput
+          type="password"
+          id="password"
+          ref={passwordRef}
+          value={formState.password}
+          onChange={(e) => {
+            handleInputChange(e);
+            confirmInputChange();
+          }}
+          required
+          placeholder="비밀번호"
+        />
+        <label htmlFor="confirmPassword" className="a11y-hidden">
+          비밀번호 확인
         </label>
+        <RegisterInput
+          type="password"
+          ref={confirmPasswordRef}
+          onChange={confirmInputChange}
+          required
+          placeholder="비밀번호 확인"
+        />
         {/* {onPassword ? null : <p>비밀번호가 틀립니다.</p>} */}
-        <button
+        <RegisterButton
           type="submit"
           onClick={signup}
           disabled={onButton ? false : true}
+          className="submitButton"
         >
           가입
-        </button>
+        </RegisterButton>
       </Form>
       <Div>
         <p>계정이 있으신가요?</p>
@@ -211,7 +224,23 @@ export default function Signup() {
 const Div = styled.div`
   display: flex;
   flex-flow: row;
-  margin-top: 40px;
+  gap: 10px;
+  margin-top: 32px;
+  p {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;
+  }
+  a {
+    font-weight: 500;
+    font-size: 12px;
+    color: #ff7761;
+    text-decoration: none;
+    z-index: 99;
+  }
+  @media only screen and (max-width: 767px) {
+    margin-top: 0px;
+  }
 `;
 export const Article = styled.article`
   display: flex;
@@ -219,16 +248,62 @@ export const Article = styled.article`
   align-items: center;
   justify-content: center;
   width: 100%;
+  height: 100vh;
 `;
-export const Form = styled.form`
-  & * {
-    margin-top: 10px;
-  }
-  border: 1px solid black;
-  width: 100%;
-  max-width: 398px;
-  min-width: 320px;
+const Form = styled.form`
+  position: relative;
+  flex-direction: column;
+  align-items: center;
+  width: 393px;
+  height: 478px;
+  border: 1px solid #ffb800;
   display: flex;
   flex-flow: column;
-  height: 572px;
+  img {
+    margin: 39px 0 16px 0;
+  }
+  * {
+    margin-bottom: 10px;
+  }
+  .duplicateButton {
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+
+    position: absolute;
+    top: 105px;
+    right: 45px;
+    background-color: #ffb800;
+    color: white;
+  }
+  .submitButton {
+    cursor: pointer;
+    margin-top: 6px;
+  }
+  @media only screen and (max-width: 767px) {
+    border: none;
+  }
+`;
+const DuplicateButton = styled.button`
+  cursor: pointer;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  padding: 0;
+  width: 315px;
+  height: 30px;
+  border: 1px solid#ffb800;
+  border-radius: 3px;
+  background: #ffffff;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #ffb800;
+  @media only screen and (max-width: 767px) {
+    width: 253px;
+  }
 `;

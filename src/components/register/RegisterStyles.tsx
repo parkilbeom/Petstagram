@@ -1,14 +1,13 @@
 import styled from "styled-components";
 
 export const RegisterButton = styled.button`
+  cursor: pointer;
   margin: 0 auto;
   display: flex;
-  flex-direction: row;
   justify-content: center;
   align-items: center;
   border: none;
   padding: 0;
-  width: 100%;
   width: 315px;
   height: 45px;
   background: #ffb800;
