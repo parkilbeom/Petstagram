@@ -16,13 +16,15 @@ type IImage = {
   alt: string;
 };
 
-type IPostCardProps = {
+interface ImageSwiperProps {
   images: (IImage | undefined)[];
-};
+  style?: React.CSSProperties;
+}
 
-export function ImageSwiper({ images }: IPostCardProps) {
+export function ImageSwiper({ images, style }: ImageSwiperProps) {
   return (
     <StyledSwiper
+      style={style}
       modules={[Navigation, Pagination, A11y, Scrollbar]}
       slidesPerView={1}
       pagination={{
