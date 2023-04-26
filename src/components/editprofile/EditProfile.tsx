@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { EditDiv } from "./EditPaswword";
+import { EditDiv } from "./EditPassword";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { getData, getUserUid, pushFile, updateData } from "@/firebase/utils";

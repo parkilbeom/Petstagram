@@ -10,10 +10,10 @@ import { useEffect, useState } from "react";
 import { getUserUid } from "@/firebase/utils";
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [lender, setLender] = useState<boolean>(false);
+  const [render, setRender] = useState<boolean>(false);
   useEffect(() => {
     getUserUid().then(() => {
-      setLender(true);
+      setRender(true);
     });
   }, []);
   return (
@@ -21,7 +21,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Provider store={store}>
         <GlobalStyles />
         <Navigate />
-        {lender ? (
+        {render ? (
           <>
             <LoginCheck />
           </>
