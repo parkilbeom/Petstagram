@@ -39,7 +39,7 @@ export default function Login() {
         .then(() => {
           console.log("로그인 성공");
           location.reload();
-          router.push("/");
+          // router.push("/");
         });
     } catch (error) {
       alert("로그인 실패");

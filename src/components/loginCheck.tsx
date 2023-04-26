@@ -16,5 +16,5 @@ export default function LoginCheck() {
   useEffect(() => {
     dispatch(login());
   }, []);
-  return <p>로그인 상태 : {userUid}</p>;
+  return <p>로그인 상태 : {userUid}/ </p>;
 }
