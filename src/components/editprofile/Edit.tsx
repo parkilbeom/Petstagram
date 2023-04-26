@@ -1,11 +1,19 @@
 import styled from "styled-components";
-import EditPaswword from "./EditPaswword";
+import EditPassword from "./EditPassword";
 import EditProfile from "./EditProfile";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { auth } from "@/firebase/app";
+import { useRouter } from "next/router";
 
 export default function Edit() {
+  const router = useRouter();
   const [click, setClick] = useState<boolean>(false);
-
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (!user) {
+      router.push("/");
+    }
+  }, []);
   function profileClickHandler() {
     setClick(false);
   }
@@ -21,7 +29,7 @@ export default function Edit() {
       <EditButton onClick={PasswordClcikHandler} isClick={click ? false : true}>
         비밀번호 변경
       </EditButton>
-      {!click ? <EditProfile /> : <EditPaswword />}
+      {!click ? <EditProfile /> : <EditPassword />}
     </Section>
   );
 }
