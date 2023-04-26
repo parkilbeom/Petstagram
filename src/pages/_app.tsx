@@ -35,4 +35,7 @@ export default function App({ Component, pageProps }: AppProps) {
 const GlobalStyles = createGlobalStyle`
    ${reset}
    ${normalize}
+   body {
+    font-family: 'Pretendard', sans-serif;
+  }
 `;
