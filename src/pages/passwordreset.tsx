@@ -4,6 +4,12 @@ import "firebase/auth";
 import styled from "styled-components";
 import { Article } from "./register";
 import Link from "next/link";
+import securityImage from "../public/images/security.svg";
+import Image from "next/image";
+import {
+  RegisterButton,
+  RegisterInput,
+} from "@/components/register/RegisterStyles";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -28,24 +34,26 @@ const ForgotPassword = () => {
   return (
     <Article>
       <Div>
-        <h1>아이콘</h1>
+        <Image src={securityImage} alt="보안 이미지" width={100} height={100} />
         <h2>로그인에 문제가 있나요?</h2>
-        <p>
-          이메일 주소을 입력 하시면 <br />
-          계정에 다시 액세스할 수 있는 링크를 보 내드립니다.
+        <p>이메일 주소을 입력 하시면</p>
+        <p className="lastP">
+          계정에 다시 액세스할 수 있는 링크를 보내드립니다.
         </p>
         <Message isError={error ? true : false}>{message}</Message>
         <form onSubmit={handleSubmit}>
-          <label>
+          <label htmlFor="email" className="a11y-hidden">
             이메일:
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
           </label>
-          <button type="submit">로그인 링크 보내기</button>
+          <RegisterInput
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="이메일 ,전화번호,사용자 이름"
+          />
+          <RegisterButton type="submit">로그인 링크 보내기</RegisterButton>
         </form>
+        <span className="orSpan">또는</span>
         <Link href="/register">새 계정 만들기</Link>
       </Div>
       <LoginSpan>
@@ -61,38 +69,97 @@ type MessageProps = {
 };
 
 const LoginSpan = styled.span`
-  width: 398px;
-  height: 38px;
+  width: 393px;
+  height: 40px;
+  border-width: 0px 1px 1px 1px;
+  border-style: solid;
+  border-color: #ffb800;
 
   .loginLink {
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: none;
     justify-content: center;
     align-items: center;
-    background: #bdbdbd;
+    color: black;
+    background-color: #fff3ca;
     display: flex;
     height: 100%;
     width: 100%;
   }
+  @media only screen and (max-width: 767px) {
+    width: 320px;
+  }
 `;
 const Message = styled.p<MessageProps>`
   color: ${(props) => (props.isError ? "#ff0000" : "black")};
+  position: absolute;
   font-weight: 800;
   font-size: 15px;
   line-height: 18px;
+  top: 260.5px;
+  left: 130px;
 `;
 const Div = styled.div`
+  position: relative;
   form {
-    gap: 12px;
     display: flex;
     flex-flow: column;
   }
-  gap: 12px;
+  input {
+    margin-bottom: 21px;
+  }
+  .lastP {
+    margin-bottom: 60px;
+  }
+  a {
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+  }
   text-align: center;
-  border: 1px solid black;
-  width: 100%;
-  max-width: 398px;
-  min-width: 320px;
+  border: 1px solid #ffb800;
+  width: 393px;
+  height: 515px;
   display: flex;
   flex-flow: column;
-  height: 545px;
+  h2 {
+    margin-bottom: 21px;
+  }
+  h2,
+  p {
+    font-weight: 500;
+    font-size: 15px;
+  }
+  p:last-child {
+  }
+  img {
+    margin: 50.5px auto 21px auto;
+  }
+  .orSpan {
+    margin: 24px auto;
+    font-weight: 500;
+    font-size: 15px;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .orSpan::before,
+  .orSpan::after {
+    content: "";
+    display: block;
+    width: 116px;
+    background-color: #ffb800;
+    height: 1px;
+  }
+  .orSpan::before {
+    margin-right: 29px;
+  }
+  .orSpan::after {
+    margin-left: 29px;
+  }
+  @media only screen and (max-width: 767px) {
+    border: none;
+  }
 `;
 export default ForgotPassword;
