@@ -43,9 +43,12 @@ type isClick = {
 };
 
 const EditButton = styled.button<isClick>`
+  font-weight: 600;
+  font-size: 24px;
+  color: #ffffff;
   cursor: pointer;
   border: none;
-  background: ${(props) => (props.isClick ? "#c2c2c2" : "#8d8d8d")};
+  background: ${(props) => (props.isClick ? "#FFB800" : "#ff9d00")};
   width: 505px;
-  height: 65px;
+  height: 50px;
 `;
