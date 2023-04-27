@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { EditDiv } from "./EditPassword";
+import { EditDiv, EditInput } from "./EditPassword";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { getData, getUserUid, pushFile, updateData } from "@/firebase/utils";
@@ -145,7 +145,7 @@ export default function EditProfile() {
   };
 
   return (
-    <EditDiv>
+    <EditDiv isPassword={false}>
       {lender && (
         <Form>
           <label>
@@ -163,47 +163,65 @@ export default function EditProfile() {
             )}
             <Div>
               <p>{userData.name}</p>
-              <input type="file" ref={fileRef} onChange={handleImageUpload} />
+              <input
+                className="fileInput"
+                type="file"
+                ref={fileRef}
+                onChange={handleImageUpload}
+              />
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (fileRef.current) {
+                    fileRef.current.click();
+                  }
+                }}
+                className="fileButton"
+              >
+                프로필 사진 바꾸기
+              </button>
             </Div>
           </label>
           <label>
             <span>성명</span>
             <Div>
-              <input
+              <EditInput
+                placeholder="성명"
                 type="text"
                 name="name"
                 id="name"
                 value={formState.name}
                 onChange={handleInputChange}
               />
-              <p>
+              {/* <p>
                 사람들이 이름, 별명 또는 비즈니스 이름 등 회원님의 알려진 이름을
                 <br />
                 사용하여 회원님의 계정을 찾을 수 있도록 도와주세요.
               </p>
-              <p>이름은 14일 안에 두 번만 변경할 수 있습니다.</p>
+              <p>이름은 14일 안에 두 번만 변경할 수 있습니다.</p> */}
             </Div>
           </label>
           <label>
             <span>사용자 이름</span>
             <Div>
-              <input
+              <EditInput
+                placeholder="사용자 이름"
                 type="text"
                 name="username"
                 id="nickname"
                 value={formState.nickname}
                 onChange={handleInputChange}
               />
-              <p>
+              {/* <p>
                 대부분의 경우 이후 14일 동안 사용자 이름을 <br />
                 다시 {userData.nickname}(으)로 변경할 수 있습니다.
-              </p>
+              </p> */}
             </Div>
           </label>
           <label>
             <span>소개</span>
             <Div>
-              <textarea
+              <EditTextarea
                 className="introduceInput"
                 onChange={(e) => {
                   onChangeHandler(e);
@@ -213,8 +231,8 @@ export default function EditProfile() {
                 value={formState.introduce}
                 name="introduct"
                 maxLength={150}
-              ></textarea>
-              <p>{count}/150</p>
+              />
+              <p className="count">{count}/150</p>
             </Div>
           </label>
           {/* <label>
@@ -223,7 +241,8 @@ export default function EditProfile() {
           </label> */}
           <label>
             <span>전화번호</span>
-            <input
+            <EditInput
+              placeholder="전화번호"
               type="tel"
               name="phone"
               id="phone"
@@ -253,11 +272,25 @@ const Form = styled.form`
   flex-flow: column;
   label {
     justify-content: space-between;
-    margin-top: 20px;
+    margin-bottom: 41px;
     display: flex;
   }
-  label input {
-    width: 527px;
+  .fileButton {
+    text-align: left;
+    padding: 0;
+    font-weight: 600;
+    font-size: 20px;
+    color: #ff7761;
+    cursor: pointer;
+    border: none;
+    background-color: #ffffff;
+    width: 160px;
+  }
+  input[type="file"] {
+    display: none;
+  }
+  label:first-child {
+    margin: 50px 0;
   }
   label img {
     width: 50px;
@@ -270,9 +303,9 @@ const Form = styled.form`
     text-align: right;
     display: block;
     width: 120px;
+    line-height: 1.5;
     font-weight: 600;
     font-size: 20px;
-    line-height: 24px;
   }
   .submitButton {
     cursor: pointer;
@@ -281,28 +314,43 @@ const Form = styled.form`
     right: 0;
     font-weight: 600;
     font-size: 20px;
-    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 30px;
     border: none;
     color: white;
-    width: 75px;
-    height: 35px;
-    background: #2fb4ff;
+    font-weight: 700;
+    font-size: 16px;
+    background: #ffb800;
+    border-radius: 5px;
   }
 `;
-
+const EditTextarea = styled.textarea`
+  border: none;
+  align-items: center;
+  padding: 10px;
+  width: 507px;
+  height: 101px;
+  background: #fff3ca;
+  border-radius: 5px;
+  resize: none;
+`;
 const Div = styled.div`
+  width: 527px;
   display: flex;
   flex-flow: column;
   gap: 12px;
-  .introduceInput {
-    height: 121px;
-    width: 527px;
-    overflow: scroll;
-    line-height: 24px;
-    overflow-x: hidden;
-    resize: none;
-  }
+
   p {
-    font-size: 15px;
+    font-weight: 600;
+    font-size: 20px;
+  }
+  .count {
+    font-weight: 400;
+    font-size: 12px;
+    color: #898989;
   }
 `;
