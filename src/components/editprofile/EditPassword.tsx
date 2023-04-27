@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import firebase from "@/firebase/app";
-
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { auth } from "../../firebase/app";
@@ -66,11 +66,11 @@ export default function EditPassword() {
   };
 
   return (
-    <EditDiv>
+    <EditDiv isPassword>
       <Form onSubmit={handleSubmit}>
         <label>
-          <span>현재 비밀번호</span>
-          <input
+          <span>이전 비밀번호</span>
+          <EditInput
             type="password"
             name="currentPassword"
             value={formState.currentPassword}
@@ -78,8 +78,8 @@ export default function EditPassword() {
           />
         </label>
         <label>
-          <span>새로운 비밀번호</span>
-          <input
+          <span>새 비밀번호</span>
+          <EditInput
             type="password"
             name="newPassword"
             value={formState.newPassword}
@@ -87,15 +87,21 @@ export default function EditPassword() {
           />
         </label>
         <label>
-          <span>새로운 비밀번호 확인</span>
-          <input
+          <span>새 비밀번호 확인</span>
+          <EditInput
             type="password"
             name="newPasswordConfirm"
             value={formState.newPasswordConfirm}
             onChange={handleInputChange}
           />
         </label>
-        <button type="submit">비밀번호 변경</button>
+        <label className="buttonLabel">
+          <button type="submit">비밀번호 변경</button>
+        </label>
+        {/* 로그인한 상태인데 맞지 않는 것 같아서 뺄게요 */}
+        {/* <div className="">
+          <Link href="/">비밀번호를 잊으셨나요?</Link>
+        </div> */}
       </Form>
       {error && <p>{error}</p>}
     </EditDiv>
@@ -107,37 +113,61 @@ const Form = styled.form`
   display: flex;
   flex-flow: column;
   margin: 0 144px 0 134px;
+  label:first-child {
+    margin-top: 50px;
+  }
   label {
-    width: 100%;
     justify-content: space-between;
     margin-top: 20px;
     display: flex;
   }
-  label input {
-    width: 507px;
-    height: 41px;
-  }
   label span {
+    margin-right: 42px;
+    text-align: right;
+    display: block;
+    width: 180px;
+    line-height: 1.5;
+    align-items: center;
     font-weight: 600;
-    font-size: 20px;
-    line-height: 24px;
+    font-size: 24px;
   }
-  button {
-    position: relative;
-    top: 50px;
-    border-radius: 10px;
+  .buttonLabel {
+    width: 100%;
+    align-items: left;
+  }
+  .buttonLabel button {
+    cursor: pointer;
+    margin-left: 212px;
     border: none;
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 24px;
-    color: white;
-    background: #2fb4ff;
-    width: 159px;
-    height: 35px;
+    font-weight: 700;
+    font-size: 16px;
+    text-align: center;
+    color: #ffffff;
+    width: 126px;
+    height: 30px;
+    background: #ffb800;
+    border-radius: 5px;
   }
 `;
-export const EditDiv = styled.div`
-  border: 1px solid black;
-  width: 1010px;
-  height: 800px;
+export const EditInput = styled.input`
+  display: flex;
+  align-items: center;
+  padding: 0px 10px 0px 20px;
+  width: 497px;
+  height: 34px;
+  background: #fff3ca;
+  border-radius: 5px;
+  font-weight: 400;
+  font-size: 16px;
+  color: #898989;
+  border: none;
+`;
+
+type isPassword = {
+  isPassword: boolean;
+};
+export const EditDiv = styled.div<isPassword>`
+  border: 0.5px solid #ffb800;
+  width: 1008px;
+  height: ${(props) => (props.isPassword ? "350px" : "650px")};
 `;
