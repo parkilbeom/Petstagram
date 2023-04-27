@@ -98,7 +98,7 @@ const Message = styled.p<MessageProps>`
   font-size: 15px;
   line-height: 18px;
   top: 260.5px;
-  left: 130px;
+  left: ${(props) => (props.isError ? "130px" : "70px")};
 `;
 const Div = styled.div`
   position: relative;
