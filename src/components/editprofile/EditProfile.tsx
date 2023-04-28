@@ -34,7 +34,7 @@ export default function EditProfile() {
   const [introduce, setIntroduce] = useState<string>("");
   const [count, setCount] = useState<number>(0);
   const [uid, setUid] = useState<string>("");
-  const [lender, setLender] = useState<boolean>(false);
+  const [render, setRender] = useState<boolean>(false);
   const router = useRouter();
   const [previewImage, setPreviewImage] = useState<string | undefined>();
 
@@ -75,10 +75,10 @@ export default function EditProfile() {
   // 리덕스 통해 uid 받아서 유저 데이터 받아오기
   const userUid = useSelector((state: state) => state.userUid.value);
   useEffect(() => {
-    if (lender == false) {
+    if (render == false) {
       getData("users", userUid).then((item: any) => {
         setUserData(item);
-        setLender(true);
+        setRender(true);
       });
     }
   }, []);
@@ -146,7 +146,7 @@ export default function EditProfile() {
 
   return (
     <EditDiv isPassword={false}>
-      {lender && (
+      {render && (
         <Form>
           <label>
             {!previewImage ? (
