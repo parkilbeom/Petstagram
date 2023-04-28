@@ -20,7 +20,7 @@ export default function Login() {
     email: "",
     password: "",
   });
-  const [errorMassage, setErrorMassage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [showPopup, setShowPopup] = useState(false);
   //  로그인 버튼
 
@@ -33,10 +33,10 @@ export default function Login() {
   const handleSignIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (formState.email == "") {
-      return setErrorMassage("이메일을 입력해주세요.");
+      return setErrorMessage("이메일을 입력해주세요.");
     }
     if (!validateEmail(formState.email)) {
-      return setErrorMassage("올바른 이메일 주소가 아닙니다.");
+      return setErrorMessage("올바른 이메일 주소가 아닙니다.");
     }
     try {
       await firebase
@@ -48,7 +48,7 @@ export default function Login() {
           // router.push("/");
         });
     } catch (error) {
-      setErrorMassage("잠시 후 다시 시도해주세요.");
+      setErrorMessage("이메일, 비밀번호를 확인해주세요.");
       // 로그인 실패 시 처리할 작업
     }
   };
@@ -117,7 +117,7 @@ export default function Login() {
             </RegisterButton>
           </form>
           <span className="orSpan">또는</span>
-          <p className="errorMassage">{errorMassage}</p>
+          <p className="errorMessage">{errorMessage}</p>
           <Link className="searchPassword" href="/passwordreset">
             비밀번호를 잊으셨나요?
           </Link>
@@ -160,7 +160,7 @@ const FlexDiv = styled.div`
   flex-flow: row;
 `;
 const MainDiv = styled.div`
-  .errorMassage {
+  .errorMessage {
     margin: 0 auto;
     color: #ff3700;
     font-weight: 500;

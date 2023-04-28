@@ -113,6 +113,7 @@ const Div = styled.div`
     margin-bottom: 60px;
   }
   a {
+    color: black;
     font-weight: 700;
     font-size: 15px;
     text-decoration: none;
