@@ -29,6 +29,7 @@ export default function Signup() {
   const [onDuplicate, setonDuplicate] = useState<boolean>(false);
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
   // 이메일 변경시 중복확인한거 해체 함수
   const unCheckDUplicate = () => {
@@ -76,25 +77,25 @@ export default function Signup() {
   const signup = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (formState.email == "") {
-      return alert("이메일을 입력해주세요.");
+      return setErrorMessage("이메일을 입력해주세요.");
     }
     if (!validateEmail(formState.email)) {
-      return alert("올바른 이메일 주소가 아닙니다.");
+      return setErrorMessage("올바른 이메일 주소가 아닙니다.");
     }
     if (!onDuplicate) {
-      return alert("중복확인은 필수입니다.");
+      return setErrorMessage("중복확인은 필수입니다.");
     }
     if (!formState.displayName) {
-      return alert("성명을 입력해주세요.");
+      return setErrorMessage("성명을 입력해주세요.");
     }
     if (!formState.nickName) {
-      return alert("사용자 이름을 입력해주세요.");
+      return setErrorMessage("사용자 이름을 입력해주세요.");
     }
     if (!isValidPassword(formState.password)) {
-      return alert("비밀번호는 6자 이상이어야 합니다.");
+      return setErrorMessage("비밀번호는 6자 이상이어야 합니다.");
     }
     if (onPassword) {
-      return alert("비밀번호를 확인해주세요.");
+      return setErrorMessage("비밀번호를 확인해주세요.");
     }
     setonButton(false);
     try {
@@ -203,7 +204,7 @@ export default function Signup() {
           required
           placeholder="비밀번호 확인"
         />
-        {/* {onPassword ? null : <p>비밀번호가 틀립니다.</p>} */}
+        <p className="errorMessage">{errorMessage}</p>
         <RegisterButton
           type="submit"
           onClick={signup}
@@ -259,6 +260,12 @@ const Form = styled.form`
   border: 1px solid #ffb800;
   display: flex;
   flex-flow: column;
+  .errorMessage {
+    margin: 10px auto;
+    color: #ff3700;
+    font-weight: 500;
+    font-size: 15px;
+  }
   img {
     margin: 39px 0 16px 0;
   }
