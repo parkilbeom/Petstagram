@@ -1,22 +1,33 @@
 import Link from 'next/link';
 import styled from 'styled-components';
+import Image from 'next/image';
+import baseProfile from '@/public/profile.jpg';
 
-type UserListProps = {
-  profile: { email: string; profile_url: string; nickname: string };
+type UserProfileProps = {
+  profile: { email: string; profile_url: string; paragraph: string };
 };
 
-export function UserList({ profile }: UserListProps) {
+export function UserList({ profile }: UserProfileProps) {
   const user_id = profile.email.split('@')[0];
   return (
     <ListBox>
       <ProfileButton>
-        <img src={profile.profile_url} alt={profile.nickname} />
+        {profile.profile_url === '' ? (
+          <StyledImage
+            src={baseProfile}
+            alt='프로필 사진'
+            width={100}
+            height={100}
+          />
+        ) : (
+          <img src={profile.profile_url} alt={profile.paragraph} />
+        )}
       </ProfileButton>
       <ProfileBox>
         <LinkStyle href='/main' passHref>
           <IdLink>{user_id}</IdLink>
         </LinkStyle>
-        <Name>{profile.nickname}</Name>
+        <Name>{profile.paragraph}</Name>
       </ProfileBox>
     </ListBox>
   );
@@ -44,6 +55,13 @@ const ProfileButton = styled.button`
     border-radius: 50%;
     object-fit: cover;
   }
+`;
+
+const StyledImage = styled(Image)`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 `;
 
 const ProfileBox = styled.div`

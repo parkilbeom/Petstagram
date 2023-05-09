@@ -43,7 +43,7 @@ export interface User {
   email: string;
   post_uid: string[] | null;
   introduce: string | null;
-  profile_url: string | null;
+  profile_url: string;
   phone: string | null;
   followers: string[] | null;
   following: string[];

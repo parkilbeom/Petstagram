@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import { UserList } from '@/components';
 
-type UserListProps = {
-  profile: { email: string; profile_url: string; nickname: string };
+type UserProfileProps = {
+  profile: { email: string; profile_url: string; paragraph: string };
 };
 
-export function FollowList({ profile }: UserListProps) {
+export function FollowList({ profile }: UserProfileProps) {
   return (
     <ListBox>
       <UserList profile={profile} />

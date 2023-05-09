@@ -198,11 +198,11 @@ export function UploadData() {
     },
   ];
 
-  useEffect(() => {
-    datas.map((data) => {
-      pushTestData('posts', data);
-    });
-  }, []);
+  // useEffect(() => {
+  //   datas.map((data) => {
+  //     pushTestData('posts', data);
+  //   });
+  // }, []);
 
   return <div>데이터 업로드 완료~</div>;
 }

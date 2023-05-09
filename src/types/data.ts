@@ -1,4 +1,4 @@
-interface User {
+export interface User {
   name: string;
   nickname: string;
   email: string;
@@ -11,7 +11,7 @@ interface User {
   scrap: string[] | null;
 }
 
-interface Comment {
+export interface Comment {
   user_uid: string;
   content: string;
   createAt: string;
@@ -19,14 +19,14 @@ interface Comment {
   recomment: Recomment[];
 }
 
-interface Recomment {
+export interface Recomment {
   user_uid: string;
   content: string;
   createAt: string;
   like: string[];
 }
 
-interface Post {
+export interface Post {
   uid: string;
   user_uid: string;
   content: string;
