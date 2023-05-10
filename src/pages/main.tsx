@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { getUserData } from '@/redux/userData';
 import { userUidState, userDataState } from '@/types/index';
+import { getColor } from '@/theme/utils';
 
 export default function Main() {
   const dispatch = useDispatch();
@@ -22,7 +23,9 @@ export default function Main() {
 
   return (
     <MainContainer>
-      <MenuSection>메뉴바</MenuSection>
+      <MenuSection bgColor={getColor('primary Yellow/primary yellow-100')}>
+        메뉴바
+      </MenuSection>
       <PostSection>
         <h2 className='a11y-hidden'>게시물</h2>
         <InfiniteScroll />
@@ -38,8 +41,8 @@ const MainContainer = styled.div`
   justify-content: space-between;
 `;
 
-const MenuSection = styled.section`
-  background-color: beige;
+const MenuSection = styled.section<{ bgColor: string }>`
+  background-color: ${(props) => props.bgColor};
   width: 20%;
 `;
 
