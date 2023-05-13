@@ -181,7 +181,7 @@ export function RecommendFollow() {
       <UserList profile={userData} />
       <TitleBox>
         <h2>회원님을 위한 추천</h2>
-        <Link href='/main'>모두 보기</Link>
+        <AllViewButton>모두 보기</AllViewButton>
       </TitleBox>
       {recommendFollowsProfile.map((data: RecommendFollowProfile, index) => {
         return <FollowList key={index} profile={data} />;
@@ -191,13 +191,27 @@ export function RecommendFollow() {
 }
 
 const FollowArticle = styled.section`
-  width: 420px;
-  padding: 34px 25px 20px 25px;
+  width: 279px;
+  padding-top: 65px;
+  margin-left: 6.77%;
 `;
 
 const TitleBox = styled.div`
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
+  margin-top: 15px;
   margin-bottom: 25px;
+
+  h2 {
+    font-size: 14px;
+    font-weight: 600;
+  }
+`;
+
+const AllViewButton = styled.button`
+  all: unset;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
 `;

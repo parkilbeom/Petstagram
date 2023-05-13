@@ -38,12 +38,13 @@ export default function Main() {
 
 const MainContainer = styled.div`
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 `;
 
 const MenuSection = styled.section<{ bgColor: string }>`
   background-color: ${(props) => props.bgColor};
   width: 20%;
+  margin-right: 14.14479%;
 `;
 
 const PostSection = styled.section`
