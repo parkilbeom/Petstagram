@@ -9,7 +9,7 @@ interface Recomment {
   like: string[];
 }
 
-interface Comment {
+export interface Comment {
   user_uid: string;
   email: string;
   content: string;
