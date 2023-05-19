@@ -3,10 +3,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 export const Article = styled.article`
-  margin: 0 auto 20px auto;
+  margin-bottom: 20px;
   display: flex;
   flex-flow: column nowrap;
-  max-width: 614px;
 `;
 
 export const HeaderSection = styled.section`

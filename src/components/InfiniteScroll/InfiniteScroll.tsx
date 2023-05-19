@@ -123,7 +123,5 @@ export function InfiniteScroll(): JSX.Element {
 }
 
 const Container = styled.div`
-  width: 100%;
-  max-width: 1000px;
-  margin: 4rem auto;
+  max-width: 614px;
 `;

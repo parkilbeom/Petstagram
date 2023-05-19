@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { FollowList, UserList } from '@/components';
 import { useSelector } from 'react-redux';
-import Link from 'next/link';
 import styled from 'styled-components';
 import { userUidState, userDataState } from '@/types/index';
 import { doc, getDoc } from 'firebase/firestore';
@@ -191,9 +190,12 @@ export function RecommendFollow() {
 }
 
 const FollowArticle = styled.section`
-  width: 279px;
+  min-width: 279px;
   padding-top: 65px;
-  margin-left: 6.77%;
+
+  @media (max-width: 1300px) {
+    display: none;
+  }
 `;
 
 const TitleBox = styled.div`

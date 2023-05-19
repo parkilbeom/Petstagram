@@ -25,6 +25,7 @@ const ListBox = styled.div`
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
+  width: 279px;
   align-items: center;
   margin-bottom: 14px;
 `;
