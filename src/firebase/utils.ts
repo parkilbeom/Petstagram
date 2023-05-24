@@ -1,14 +1,45 @@
-import { getStorage, uploadBytes, ref } from "firebase/storage";
-import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
-import { db } from "./app";
-import firebase from "@/firebase/app";
+import { useState, useCallback, useMemo } from 'react';
+import { getStorage, uploadBytes, ref } from 'firebase/storage';
+import {
+  collection,
+  doc,
+  getDocs,
+  getDoc,
+  updateDoc,
+  serverTimestamp,
+  query,
+  where,
+} from 'firebase/firestore';
+import { User } from '@/components/InfiniteScroll/postList';
+import { db } from './app';
+import firebase, { usersRef } from '@/firebase/app';
+import { Post } from '@/components/InfiniteScroll/postList';
+
 // 파이어스토어로 데이터 보내는 함수 (콜렉션 이름,넣을 객체)
 export function pushData(collection: string, object: object) {
   db.collection(collection)
     .add(object)
-    .then(() => console.log("Data successfully written!"))
-    .catch(() => console.error("Error writing data: "));
+    .then(() => console.log('Data successfully written!'))
+    .catch(() => console.error('Error writing data: '));
 }
+
+// 파이어스토어로 데이터 보내는 함수 (콜렉션 이름,넣을 객체)
+export function pushTestData(collection: string, object: Post) {
+  object['createAt'] = serverTimestamp();
+  object['comment'].forEach((comment, index) => {
+    object['comment'][index]['createAt'] = new Date().toISOString();
+
+    comment['recomment']?.forEach((recomment, index) => {
+      comment['recomment'][index]['createAt'] = new Date().toISOString();
+    });
+  });
+
+  db.collection(collection)
+    .add(object)
+    .then(() => console.log('Data successfully written!'))
+    .catch(() => console.error('Error writing data: '));
+}
+
 // 파이어스토에서 데이터 받아오는 함수  (콜렉션 이름),(도큐먼트이름) 도큐먼트 없어도 사용가능
 export const getData = async (collectionName: string, docName?: string) => {
   return new Promise((resolve, reject) => {
@@ -52,7 +83,7 @@ export const getUserUid = () => {
         resolve(user.uid);
       } else {
         resolve(1);
-        console.log("로그아웃상태");
+        console.log('로그아웃상태');
       }
     });
   });

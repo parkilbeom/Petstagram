@@ -1,9 +1,9 @@
-import styled from "styled-components";
-import EditPassword from "./EditPassword";
-import EditProfile from "./EditProfile";
-import { useEffect, useState } from "react";
-import { auth } from "@/firebase/app";
-import { useRouter } from "next/router";
+import styled from 'styled-components';
+import EditPassword from './EditPassword';
+import EditProfile from './EditProfile';
+import { useEffect, useState } from 'react';
+import { auth } from '@/firebase/app';
+import { useRouter } from 'next/router';
 
 export default function Edit() {
   const router = useRouter();
@@ -11,7 +11,7 @@ export default function Edit() {
   useEffect(() => {
     const user = auth.currentUser;
     if (!user) {
-      router.push("/");
+      router.push('/');
     }
   }, []);
   function profileClickHandler() {
@@ -36,6 +36,8 @@ export default function Edit() {
 
 const Section = styled.section`
   width: 1010px;
+  margin: 0 auto;
+  margin-top: 41px;
 `;
 
 type isClick = {
@@ -48,7 +50,7 @@ const EditButton = styled.button<isClick>`
   color: #ffffff;
   cursor: pointer;
   border: none;
-  background: ${(props) => (props.isClick ? "#FFB800" : "#ff9d00")};
+  background: ${(props) => (props.isClick ? '#FFB800' : '#ff9d00')};
   width: 505px;
   height: 50px;
 `;

@@ -1,128 +1,111 @@
-import React from 'react';
-import Link from 'next/link';
-import styled from 'styled-components';
+import * as S from './PostCard.styled';
+
+import React, { useEffect, useState } from 'react';
 import { ImageSwiper } from '../ImageSwiper/ImageSwiper';
+import { Post, User } from '@/components/InfiniteScroll/postList';
+import { getData } from '@/firebase/utils';
+import {
+  PostHeader,
+  SimpleCommentUnit,
+  DetailCommentUnit,
+  PostIcon,
+  LikeList,
+  AddComment,
+} from '@/components/index';
 
-const testImageObject = [
-  {
-    src: 'https://dimg.donga.com/wps/NEWS/IMAGE/2022/01/28/111500268.2.jpg',
-    alt: '멍뭉이1',
-  },
-  {
-    src: 'https://img1.daumcdn.net/thumb/R1280x0.fjpg/?fname=http://t1.daumcdn.net/brunch/service/user/32E9/image/BA2Qyx3O2oTyEOsXe2ZtE8cRqGk.JPG',
-    alt: '멍뭉이2',
-  },
-  {
-    src: 'https://interbalance.org/wp-content/uploads/2021/08/flouffy-VBkIK3qj3QE-unsplash-scaled-e1631077364762.jpg',
-    alt: '멍뭉이3',
-  },
-];
+import { getColor } from '@/theme/utils';
+import { isCreateAtType, caculateTime } from '@/utils/mainUtil';
 
-export function PostCard() {
+interface PostCardProps {
+  post: Post;
+}
+
+export function PostCard({ post }: PostCardProps) {
+  const [postUserData, setPostUserData] = useState<User | undefined>(undefined);
+  const [likeEmail, setLikeEmail] = useState<string[]>([]);
+  const [postDateP, setPostDateP] = useState<string>('');
+  const images = post.images;
+  const postUserId = postUserData?.email.split('@')[0];
+
+  const getUserData = async () => {
+    if (!postUserData) {
+      const result = (await getData('users', post.user_uid)) as User;
+      if (result) setPostUserData(result);
+    }
+  };
+
+  const getLikeUsers = async (uid: string) => {
+    if (!postUserData) {
+      const result = (await getData('users', uid)) as User;
+      if (result) setLikeEmail((likeEmail) => [...likeEmail, result.email]);
+    }
+  };
+
+  useEffect(() => {
+    getUserData();
+    post.like.map((uid) => {
+      getLikeUsers(uid);
+    });
+
+    if (isCreateAtType(post.createAt)) {
+      setPostDateP(caculateTime(post.createAt.seconds));
+    }
+  }, []);
+
   return (
     <>
-      <Article>
-        <HeaderSection>
-          <ProfileButton>
-            <img
-              src='https://dimg.donga.com/wps/NEWS/IMAGE/2022/01/28/111500268.2.jpg'
-              alt='프로필 사진'
-            />
-          </ProfileButton>
-          <p>사용자 아이디</p>
-          <p>1일</p>
-          <MoreButton>...</MoreButton>
-        </HeaderSection>
-        <ImageSwiper images={testImageObject} />
-        <FlexRow>
-          <button>좋아요</button>
-          <button>댓글</button>
-          <button>메세지</button>
-          <button>게시물저장</button>
-        </FlexRow>
-        <CommentSection>
-          <FlexRow>
-            <Link href='/main' passHref>
-              <IdLink>to06109</IdLink>
-            </Link>
-            <p>
-              님 외 <strong>여러명</strong>이 좋아합니다
-            </p>
-          </FlexRow>
-          <FlexRow>
-            <Link href='/main' passHref>
-              <IdLink>yesong</IdLink>
-            </Link>
-            <p>
-              비가 많이 내렸던 촬영날 ☔️ 덥고 습한데도 꿉꿉하지 않았던
-              와샤슬랙스 *.* 벨티드 디테일이 있어 허리를 조절...{' '}
-            </p>
-          </FlexRow>
-          <MoreButton>더 보기</MoreButton>
-          <MoreButton>댓글 46개 모두 보기</MoreButton>
-          <FlexRow>
-            <Link href='/main' passHref>
-              <IdLink>to06109</IdLink>
-            </Link>
-            <p>사이즈는 어떻게 되나요?</p>
-          </FlexRow>
-          <FlexRow>
-            <Link href='/main' passHref>
-              <IdLink>yesong</IdLink>
-            </Link>
-            <p>s, m, l, xl 이렇게 있습니다 고갱님!</p>
-          </FlexRow>
-          <input type='text' placeholder='댓글 달기...'></input>
-          <button>이모티콘</button>
-        </CommentSection>
-      </Article>
+      <S.Article>
+        <PostHeader
+          props={{
+            postUserData,
+            postUserId,
+            postDateP,
+          }}
+        ></PostHeader>
+        <ImageSwiper images={images} />
+        <PostIcon />
+        <S.CommentSection>
+          <LikeList likeEmail={likeEmail} />
+          <S.FlexRow>
+            <S.InitialLink href='/main' passHref>
+              <S.IdLink>{postUserId}</S.IdLink>
+            </S.InitialLink>
+            <p>{post.content}</p>
+          </S.FlexRow>
+          <S.MoreButton color={getColor('Grey/grey-700')}>더 보기</S.MoreButton>
+          <S.MoreCommentButton color={getColor('Grey/grey-700')}>
+            댓글 {post.comment.length}개 모두 보기
+          </S.MoreCommentButton>
+          {post.comment.map((data) => {
+            return (
+              <>
+                {/* <DetailCommentUnit data={data}></DetailCommentUnit> */}
+                <SimpleCommentUnit data={data}></SimpleCommentUnit>
+                {data.recomment.length != 0
+                  ? data.recomment.map((recomment) => {
+                      return (
+                        <S.FlexRow>
+                          <S.InitialLink href='/main' passHref>
+                            <S.IdLink>{recomment.email.split('@')[0]}</S.IdLink>
+                          </S.InitialLink>
+                          <S.RecommentLink
+                            href='/main'
+                            passHref
+                            color={getColor('blue/blue-300')}
+                          >
+                            <S.IdLink>@{data.email.split('@')[0]}</S.IdLink>
+                          </S.RecommentLink>
+                          <p>{recomment.content}</p>
+                        </S.FlexRow>
+                      );
+                    })
+                  : null}
+              </>
+            );
+          })}
+          <AddComment />
+        </S.CommentSection>
+      </S.Article>
     </>
   );
 }
-
-const Article = styled.article`
-  margin: 0 auto;
-  border: 1px solid black;
-  display: flex;
-  flex-flow: column nowrap;
-  max-width: 614px;
-  margin-bottom: 20px;
-`;
-
-const HeaderSection = styled.section`
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-`;
-
-const ProfileButton = styled.button`
-  all: unset;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-  }
-`;
-
-const MoreButton = styled.button`
-  color: gray;
-  cursor: pointer;
-`;
-
-const CommentSection = styled.section`
-  display: flex;
-  flex-flow: column nowrap;
-`;
-
-const FlexRow = styled.div`
-  display: flex;
-`;
-
-const IdLink = styled.a`
-  font-weight: 600;
-`;
