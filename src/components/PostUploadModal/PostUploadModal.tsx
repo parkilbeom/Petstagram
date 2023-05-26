@@ -1,5 +1,6 @@
+import postUploaderSlice from "@/redux/postImageUploader";
 import postUploadModalSlice, { PostUploadModalState, addCurContentIndex, close, open } from "@/redux/postUploadModal";
-import { ReactElement, useEffect, useState } from "react";
+import { MouseEvent, ReactElement, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import styled, { StyledComponent } from "styled-components";
@@ -15,13 +16,15 @@ export interface PostUploadModalProps {
    * 해당 값을 false로 주게 되면 바깥 화면 터치로 모달을 닫게 하고 closeBtn은 존재하지 않게 됨
    * */
   closeBtnStyle?: StyledComponent<"button", any, {}, never> | boolean;
+  hasHeader?: boolean;
+  contentStyle?: StyledComponent<"div", any, {}, never>;
 }
 
 interface state {
   postUploadModalSlice: PostUploadModalState;
 }
-export const PostUploadModal = ({ contentList, openBtnStyle, closeBtnStyle }: PostUploadModalProps) => {
-  const [hasCloseBtn, setHasCloseBtn] = useState(true);
+export const PostUploadModal = ({ contentList, openBtnStyle, closeBtnStyle, hasHeader = false, contentStyle }: PostUploadModalProps) => {
+  const [hasCloseBtn, setHasCloseBtn] = useState(false);
   const dispatch = useDispatch();
   const isOpen = useSelector(({ postUploadModalSlice: state }: state) => {
     return state.isOpen;
@@ -29,13 +32,21 @@ export const PostUploadModal = ({ contentList, openBtnStyle, closeBtnStyle }: Po
   const curContentIndex = useSelector(({ postUploadModalSlice: state }: state) => {
     return state.curContentIndex;
   });
+  const nextBtnActived = useSelector(({ postUploadModalSlice: state }: state) => {
+    return state.nextBtnActived;
+  });
+  const prevBtnActived = useSelector(({ postUploadModalSlice: state }: state) => {
+    return state.prevBtnActived;
+  });
 
-  const moveNextContentHandler = () => {
+  const moveNextContentHandler = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (curContentIndex < contentList.length) {
       dispatch(addCurContentIndex(1));
     }
   };
-  const movePrevContentHandler = () => {
+  const movePrevContentHandler = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (curContentIndex > 0) {
       dispatch(addCurContentIndex(-1));
     }
@@ -47,6 +58,7 @@ export const PostUploadModal = ({ contentList, openBtnStyle, closeBtnStyle }: Po
     dispatch(open());
   };
   const closeModalHandler = () => {
+    dispatch(postUploaderSlice.actions.clearImageList());
     dispatch(close());
   };
 
@@ -59,6 +71,10 @@ export const PostUploadModal = ({ contentList, openBtnStyle, closeBtnStyle }: Po
       ExitBtn = closeBtnStyle;
     } else if (closeBtnStyle == false) {
       setHasCloseBtn(false);
+    }
+
+    if (contentStyle) {
+      ModalContent = contentStyle;
     }
   }, []);
 
@@ -77,9 +93,30 @@ export const PostUploadModal = ({ contentList, openBtnStyle, closeBtnStyle }: Po
         {isOpen && contentList[curContentIndex] ? (
           <ModalBackdrop onClick={closeModalHandler}>
             {hasCloseBtn ? <ExitBtn onClick={closeModalHandler}>x</ExitBtn> : null}
-            <ModalView onClick={(e) => e.stopPropagation()}>
-              <div className="modalTitle">{contentList[curContentIndex].modalTitle}</div>
-              <div className="modalContent">{contentList[curContentIndex].content}</div>
+            <ModalView onClick={(e: { stopPropagation: () => any }) => e.stopPropagation()}>
+              {hasHeader ? (
+                <ModalHeader>
+                  {nextBtnActived ? (
+                    <button className="modalPrevBtn" onClick={movePrevContentHandler}>
+                      <svg width="27" height="23" viewBox="0 0 27 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M0.439341 10.4393C-0.146446 11.0251 -0.146446 11.9749 0.439341 12.5607L9.98528 22.1066C10.5711 22.6924 11.5208 22.6924 12.1066 22.1066C12.6924 21.5208 12.6924 20.5711 12.1066 19.9853L3.62132 11.5L12.1066 3.01472C12.6924 2.42893 12.6924 1.47919 12.1066 0.893398C11.5208 0.307611 10.5711 0.307611 9.98528 0.893398L0.439341 10.4393ZM26.5 10L1.5 10L1.5 13L26.5 13L26.5 10Z"
+                          fill="#333333"
+                        />
+                      </svg>
+                    </button>
+                  ) : null}
+
+                  <div className="modalTitle">{contentList[curContentIndex].modalTitle}</div>
+                  {nextBtnActived ? (
+                    <button className="modalNextBtn" onClick={moveNextContentHandler}>
+                      다음
+                    </button>
+                  ) : null}
+                </ModalHeader>
+              ) : null}
+              {/* <div className="modalContent">{contentList[curContentIndex].content}</div> */}
+              <ModalContent>{contentList[curContentIndex].content}</ModalContent>
             </ModalView>
           </ModalBackdrop>
         ) : null}
@@ -146,24 +183,70 @@ export const ModalView = styled.div.attrs((props) => ({
   align-items: center;
   flex-direction: column;
   border-radius: 20px;
-  /* width: 718px; */
+
+  overflow: hidden;
   background-color: #ffffff;
-  > div.modalTitle {
-    width: 100%;
-    height: 24px;
-    margin: 13px auto;
-    text-align: center;
-    line-height: 24px;
-    font-weight: 400;
-    font-size: 20px;
-    color: #333333;
-  }
-  > div.modalContent {
-    height: 718px;
+
+  /* > div.modalContent {
+    height: 700px;
     min-width: 803px;
+    max-width: 1095px;
     border-top: 0.8px gray solid;
     display: flex;
     justify-content: center;
     align-items: center;
+  } */
+`;
+
+let ModalContent = styled.div`
+  height: 700px;
+  min-width: 803px;
+  max-width: 1095px;
+  border-top: 0.8px gray solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalHeader = styled.div`
+  width: 100%;
+  height: 24px;
+  margin: 13px auto;
+  text-align: center;
+  line-height: 24px;
+  font-weight: 400;
+  font-size: 20px;
+  color: #333333;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+
+  > div.modalTitle {
+    max-width: 100%;
+    margin: 0 auto;
+    height: 24px;
+  }
+  > button {
+    display: flex;
+    width: 35px;
+    height: 24px;
+    justify-content: center;
+    cursor: pointer;
+    background-color: #ffffff;
+    align-items: center;
+    padding: 0px;
+    border: none;
+
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+    color: #ff3700;
+    overflow: hidden;
+  }
+  > button.modalPrevBtn {
+    margin-left: 25px;
+  }
+  > button.modalNextBtn {
+    margin-right: 25px;
   }
 `;
