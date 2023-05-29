@@ -1,19 +1,37 @@
 import * as S from '../PostCard.styled';
 import styled from 'styled-components';
-import React, { useEffect, useState } from 'react';
-import { Comment } from '@/components/InfiniteScroll/postList';
+import React, { useEffect, useState, forwardRef, RefObject } from 'react';
+import { Comment, Recomment } from '@/components/InfiniteScroll/postList';
 import { renderProfile, caculateTime } from '@/utils/mainUtil';
-import { User } from '@/components/InfiniteScroll/postList';
-import { getData } from '@/firebase/utils';
+import { Post, User } from '@/components/InfiniteScroll/postList';
+import { getData, updateData } from '@/firebase/utils';
 import Image from 'next/image';
 import heart from '@/public/icons/PostCard/heart.png';
 import { getColor } from '@/theme/utils';
+import { useSelector } from 'react-redux';
+import { userUidState } from '@/types/index';
 
 interface DetailCommentUnitProps {
-  data: Comment;
+  postId: string;
+  data: Comment | Recomment;
+  commentIndex: number;
+  onClickRecomment: (index: number) => void;
+  recommentIndex?: number;
+  inputRef: RefObject<HTMLInputElement>;
 }
 
-export function DetailCommentUnit({ data }: DetailCommentUnitProps) {
+export const DetailCommentUnit = forwardRef<
+  HTMLInputElement,
+  DetailCommentUnitProps
+>(function DetailCommentUnit({
+  postId,
+  data,
+  commentIndex,
+  onClickRecomment,
+  recommentIndex,
+  inputRef,
+}) {
+  const userUid = useSelector((state: userUidState) => state.userUid.value);
   const [commentUserData, setCommentUserDate] = useState<User | undefined>(
     undefined
   );
@@ -23,6 +41,29 @@ export function DetailCommentUnit({ data }: DetailCommentUnitProps) {
     if (!commentUserData) {
       const result = (await getData('users', data.user_uid)) as User;
       if (result) setCommentUserDate(result);
+    }
+  };
+
+  const handleAddRecomment = () => {
+    onClickRecomment(commentIndex);
+    if (inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.value = `@${commentUserData?.email.split('@')[0]}`;
+    }
+  };
+
+  const handleDeleteRecomment = async () => {
+    const result = (await getData('posts', postId)) as Post;
+    if (result) {
+      if (recommentIndex != undefined) {
+        // 답글 삭제
+        result.comment[commentIndex].recomment.splice(recommentIndex, 1);
+      } else {
+        // 댓글 삭제
+        result.comment.splice(commentIndex, 1);
+      }
+
+      updateData('posts', postId, result);
     }
   };
 
@@ -52,13 +93,14 @@ export function DetailCommentUnit({ data }: DetailCommentUnitProps) {
             {commentDateP}
           </CommentDate>
           {data.like.length !== 0 ? (
-            <RecommentButton color={getColor('Grey/grey-600')}>
-              좋아요 {data.like.length}개
-            </RecommentButton>
+            <RecommentButton>좋아요 {data.like.length}개</RecommentButton>
           ) : null}
-          <RecommentButton color={getColor('Grey/grey-600')}>
+          <RecommentButton onClick={handleAddRecomment}>
             답글 달기
           </RecommentButton>
+          {data.user_uid === userUid ? (
+            <DeleteButton onClick={handleDeleteRecomment}>삭제</DeleteButton>
+          ) : null}
         </S.FlexRow>
       </CommentDiv>
       <S.IconButton>
@@ -66,7 +108,7 @@ export function DetailCommentUnit({ data }: DetailCommentUnitProps) {
       </S.IconButton>
     </CommentUnit>
   );
-}
+});
 
 const CommentUnit = styled(S.FlexRow)`
   justify-content: space-between;
@@ -84,12 +126,20 @@ const CommentFlexRow = styled(S.FlexRow)`
   padding-bottom: 6px;
 `;
 
-const RecommentButton = styled.button<{ color: string }>`
+const RecommentButton = styled.button`
   all: unset;
   cursor: pointer;
   font-size: 14px;
   font-weight: 600;
-  color: ${(props) => props.color};
+  color: ${getColor('Grey/grey-600')};
+`;
+
+const DeleteButton = styled.button`
+  all: unset;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: ${getColor('Grey/grey-600')};
 `;
 
 const CommentDate = styled.time<{ color: string }>`

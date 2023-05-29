@@ -60,7 +60,7 @@ export const IconButton = styled.button`
 export const MoreButton = styled.button<{ color: string }>`
   all: unset;
   cursor: pointer;
-  margin-top: 9px;
+  margin: 9px 0;
   color: ${(props) => props.color};
   font-weight: 500;
 `;
@@ -71,6 +71,12 @@ export const MoreCommentButton = styled.button<{ color: string }>`
   margin: 16px 0;
   color: ${(props) => props.color};
   font-weight: 500;
+
+  ::before {
+    content: '――';
+    margin-right: 16px;
+    font-weight: 200;
+  }
 `;
 
 export const CommentSection = styled.section`
@@ -105,6 +111,10 @@ export const IconSection = styled.section`
 export const FlexRow = styled.div`
   display: flex;
   gap: 8px;
+`;
+
+export const FlexRowGrow = styled(FlexRow)`
+  flex-grow: 1;
 `;
 
 export const Comment = styled(FlexRow)`

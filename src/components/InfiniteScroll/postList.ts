@@ -1,7 +1,7 @@
 // lib/postList.ts
 import firebase from '@/firebase/app';
 
-interface Recomment {
+export interface Recomment {
   user_uid: string;
   email: string;
   content: string;

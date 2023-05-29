@@ -17,10 +17,15 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/firebase/app';
 
+export interface PostData extends Post {
+  postId: string;
+}
+
 let lastVisible: any = undefined;
-let isFirst = true;
 
 export function InfiniteScroll(): JSX.Element {
+  let isFirst = true;
+
   const userUid = useSelector((state: userUidState) => state.userUid.value);
   const userInfo = useSelector((state: userDataState) => {
     const { isLoading, error, data } = state.userData;
@@ -28,7 +33,7 @@ export function InfiniteScroll(): JSX.Element {
   });
 
   const [userData, setUserData] = useState<User>();
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [postIds, setPostIds] = useState<string[]>([]);
   const [follows, setFollows] = useState<string[]>([]);
 
   useEffect(() => {
@@ -41,6 +46,7 @@ export function InfiniteScroll(): JSX.Element {
   // 게시물 첫 렌더링(스크롤 없이)
   useEffect(() => {
     if (follows.length != 0 && isFirst) {
+      lastVisible = undefined;
       getNextPosts();
       isFirst = false;
     }
@@ -72,10 +78,10 @@ export function InfiniteScroll(): JSX.Element {
     }
 
     getDocs(q).then((snapshot) => {
-      setPosts((posts) => {
-        const postArr = [...posts];
+      setPostIds((postIds) => {
+        const postArr = [...postIds];
         snapshot.forEach((doc) => {
-          postArr.push(doc.data() as Post);
+          postArr.push(doc.id);
         });
         return postArr;
       });
@@ -101,7 +107,7 @@ export function InfiniteScroll(): JSX.Element {
         getNextPosts();
       }
     }
-  }, [posts, follows]);
+  }, [postIds, follows]);
 
   useEffect(() => {
     // 스크롤이 발생할때마다 handleScroll 함수를 호출하도록 추가
@@ -111,12 +117,12 @@ export function InfiniteScroll(): JSX.Element {
       // 해당 컴포넌트가 언마운트 될때, 스크롤 이벤트를 제거
       window.removeEventListener('scroll', handleScroll, true);
     };
-  }, [handleScroll, posts]);
+  }, [handleScroll, postIds]);
 
   return (
     <Container>
-      {posts.map((post: Post, idx: number) => (
-        <PostCard key={idx} post={post} />
+      {postIds.map((postId: string, idx: number) => (
+        <PostCard key={idx} postId={postId} />
       ))}
     </Container>
   );
