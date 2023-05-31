@@ -1,16 +1,16 @@
-import { Provider } from 'react-redux';
-import { AppProps } from 'next/app';
-import store from '../redux/store';
-import { createGlobalStyle } from 'styled-components';
-import normalize from 'styled-normalize';
-import reset from 'styled-reset';
-import LoginCheck from '@/components/loginCheck';
-import Navigate from '@/components/Navigate';
-import { useEffect, useState } from 'react';
-import { getUserUid } from '@/firebase/utils';
+import { Provider } from "react-redux";
+import { AppProps } from "next/app";
+import store from "../redux/store";
+import { createGlobalStyle } from "styled-components";
+import normalize from "styled-normalize";
+import reset from "styled-reset";
+import LoginCheck from "@/components/loginCheck";
+import Navigate from "@/components/Navigate";
+import { useEffect, useState } from "react";
+import { getUserUid } from "@/firebase/utils";
 
-import type { ReactElement, ReactNode } from 'react';
-import type { NextPage } from 'next';
+import type { ReactElement, ReactNode } from "react";
+import type { NextPage } from "next";
 
 // 각 페이지에서 불러와서 쓸 '레이아웃 적용된 페이지의 type'
 type NextPageWithLayout = NextPage & {
@@ -31,7 +31,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   }, []);
 
   // 페이지 단위에서 getLayout을 적용할 지 말지 결정
-  const getLayout = Component.getLayout ?? ((page) => page);
+  const getLayout = Component.getLayout ?? (page => page);
 
   return (
     <Provider store={store}>
