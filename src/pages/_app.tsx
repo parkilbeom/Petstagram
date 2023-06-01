@@ -8,7 +8,7 @@ import LoginCheck from "@/components/loginCheck";
 import Navigate from "@/components/Navigate";
 import { useEffect, useState } from "react";
 import { getUserUid } from "@/firebase/utils";
-
+import Modal from "@/components/popup/Modal";
 import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
 
@@ -43,6 +43,8 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
         </>
       ) : null}
       {getLayout(<Component {...pageProps} />)}
+      <Modal />
+      <div id="modal-root"></div>
     </Provider>
   );
 }

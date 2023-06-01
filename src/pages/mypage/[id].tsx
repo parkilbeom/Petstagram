@@ -3,12 +3,14 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { MenuBarLayout } from "@/components";
 import { userUidState, userDataState } from "@/types/index";
-import { useSelector } from "react-redux";
 import { getData } from "@/firebase/utils";
 import { User, Post } from "@/types/index";
 import styled from "styled-components";
 import baseProfile from "@/public/profile.jpg";
 import multiIcon from "@/public/icons/PostCard/moreVertical.png";
+import { useSelector, useDispatch } from "react-redux";
+import { setModal } from "@/redux/modal";
+import FollowerModal from "@/components/popup/Template/FollowerModal";
 const UserProfile = styled.div``;
 const Gallery = styled.div``;
 const GalleryFrame = styled.div`
@@ -21,6 +23,11 @@ const Multiple = styled(Image)`
   background-color: white;
   //나중에 지울것
 `;
+
+const Clickable = styled.div`
+  cursor: pointer;
+`;
+
 export default function MyPage() {
   const router = useRouter();
   const { id } = router.query;
@@ -28,6 +35,7 @@ export default function MyPage() {
   const [postInfo, setPostInfo] = useState<Post[] | []>([]);
   const [isLoading, setIsLoading] = useState(false);
   const _postInfo = useRef<Post[] | []>([]);
+  const dispatch = useDispatch();
   const addPostInfo = (post: Post) => {
     _postInfo.current = [..._postInfo.current, post];
     setPostInfo([..._postInfo.current]);
@@ -41,7 +49,6 @@ export default function MyPage() {
   const getPostInfoData = async (id: string) => {
     await getData("posts", id).then(data => {
       addPostInfo(data as Post);
-      console.log(id, data, postInfo);
     });
   };
   useEffect(() => {
@@ -64,7 +71,15 @@ export default function MyPage() {
           />
           {userInfo["name"]}
           <div>게시물 {userInfo["post_uid"].length}</div>
-          <div>팔로워 {userInfo["followers"].length}</div>
+          <Clickable
+            onClick={() =>
+              dispatch(
+                setModal(<FollowerModal followers={userInfo["followers"]} />)
+              )
+            }
+          >
+            팔로워 {userInfo["followers"].length}
+          </Clickable>
           <div>팔로잉 {userInfo["following"].length}</div>
         </UserProfile>
         <Gallery>

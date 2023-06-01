@@ -19,15 +19,21 @@ const postUploadModalSlice = createSlice({
   name: "PostUploadModal",
   initialState,
   reducers: {
-    open: (state) => {
+    open: state => {
       state.isOpen = true;
     },
-    close: (state) => {
+    close: state => {
       state.isOpen = false;
     },
     addCurContentIndex: (state, action) => {
-      if (state.curContentIndex + action.payload >= 0 && state.curContentIndex + action.payload <= 1) {
-        console.log("state.curContentIndex + action.payload", state.curContentIndex + action.payload);
+      if (
+        state.curContentIndex + action.payload >= 0 &&
+        state.curContentIndex + action.payload <= 1
+      ) {
+        console.log(
+          "state.curContentIndex + action.payload",
+          state.curContentIndex + action.payload
+        );
 
         state.curContentIndex = state.curContentIndex + action.payload;
       }
@@ -41,5 +47,11 @@ const postUploadModalSlice = createSlice({
   },
 });
 
-export const { open, close, addCurContentIndex, setNextBtnActive, setPrevBtnActive } = postUploadModalSlice.actions;
+export const {
+  open,
+  close,
+  addCurContentIndex,
+  setNextBtnActive,
+  setPrevBtnActive,
+} = postUploadModalSlice.actions;
 export default postUploadModalSlice;

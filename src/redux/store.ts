@@ -4,6 +4,7 @@ import userUidReduce from "./userUid";
 import counterReduce from "./counter";
 import postUploadModalSlice from "./postUploadModal";
 import userDataReduce from "./userData";
+import modalReduce from "./modal";
 // import postUploaderSlice from "./postImageUploader";
 
 const rootReducer = combineReducers({
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   counter: counterReduce,
   postUploadModalSlice: postUploadModalSlice.reducer,
   // postUploaderSlice: postUploaderSlice.reducer,
+  modal: modalReduce,
 });
 
 const store = configureStore({
